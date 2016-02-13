@@ -50,16 +50,20 @@ def load_data_wrapper():
 
 training_data, validation_data, test_data  = load_data_wrapper()
 training_data, validation_data, test_data = list(training_data), list(validation_data), list(test_data)
-x = 0
 
-tt = test_data[0][0]
-max_sim = 0
-result = 0
-yy = test_data[0][0]
+#x = 0 
+#
+#tt = test_data[0][0]
+#max_sim = 0  
+#result = 0 
+#yy = test_data[0][0]
+
 
 
 
 def NNmodule():
+    f_predicted = open('predicted.txt', 'w')
+    f_label = open('label.txt', 'w')
     for test_entry in test_data:
         test_features = test_entry[0]
         test_label = test_entry[1]
@@ -75,11 +79,18 @@ def NNmodule():
         print(predicated_label)
         print(test_label)
         print(nearest_neighbor[1][test_label])
+
+        f_predicted.write(str(predicated_label) + '\n');
+        f_label.write(str(test_label) + '\n');
+
         if nearest_neighbor[1][test_label] == 1:
             print("success")
         else:
             print("fail")
         print("=============")
+
+    f_predicted.close()
+    f_label.close()
 
 NNmodule()
 
