@@ -92,15 +92,56 @@ def NNmodule():
     f_predicted.close()
     f_label.close()
 
-NNmodule()
+#NNmodule()
 
 def build_matrix():
     mtx = np.zeros((11, 11))
     print(mtx)
-    predicated_label=0
-    test_label=0
-    mtx[predicated_label][test_label] += 1 
-    print(mtx)
+    f_predicted = open('predicted.txt', 'r')
+    f_label = open('label.txt', 'r')
+    np.set_printoptions(suppress=True)
+    for predicted_label in f_predicted:
+        true_label = f_label.readline()
+        mtx[int(predicted_label)][int(true_label)] += 1
+        print(mtx) 
+        print("====")
+    for i in range(0,10):
+        mtx[i][10] = sum(mtx[i][:9])
+        mtx[10][i] = sum(mtx[:9][i])    
+    
+    
+    
+    
+#build_matrix()
+mtx = np.array([[  978.  ,   0   ,  8.  ,  0   ,  0  ,   1.  ,   3.   ,  1.,     4.   ,  9.,
+      0] ,
+ [    1. , 1128.  ,   0    , 0   ,  3.  ,   0  ,   3. ,  11.    , 2.   ,  6.,
+      0],
+ [    0   ,  3. , 1005.  ,   1.  ,   1.  ,   0   ,  0 ,    5.   ,  2. ,    1.,
+      0],
+ [    0  ,   1.   ,  5. ,  974.  ,   0  ,  19.   ,  0   ,  2. ,   15.  ,   4.,
+      0],
+ [    0   ,  1.  ,   0   ,  1.   ,937.   ,  1.   ,  2.  ,   1. ,    2. ,    9.,
+      0],
+ [    0   ,  1.   ,  0   , 14. ,   0 ,  847.    , 3.    , 0 ,    4.  ,   2.,
+      0],
+ [    0   ,  1.  ,   1.    , 0   ,  6. ,   11. ,  947.   ,  0  ,   5.   ,  1.,
+      0],
+ [    1.   ,  0   , 10  ,   4.   ,  2. ,    1.   ,  0 , 997.  ,   5.   ,  9.,
+      0],
+ [    0   ,  0    , 2.  ,   8.   ,  1.    , 6.   ,  0  ,   0 ,  931.  ,   4.,
+      0],
+ [    0  ,   0  ,   1.  ,   8.   , 32.  ,   6.  ,   0 ,   11.  ,   4. ,  964.,
+      0],
+ [    0   ,  0    , 0  ,   0    , 0   ,  0  ,   0   ,  0   ,  0    , 0,
+      0]])
+print(mtx.shape)
+np.set_printoptions(suppress=True)
+for i in range(0,10):
+        mtx[i][10] = sum(mtx[i,:10])
+        mtx[10][i] = sum(mtx[:10, i])  
+mtx[10][10] =   sum(mtx[10,:10]) + sum(mtx[:10,10])    
+print(mtx)  
 #----------------------------------------------------- for row in training_data:
     #----------------------------------------------------------------- x = x + 1
     #------------------------------------------------------------------ print(x)
