@@ -17,7 +17,7 @@ import math
 def dot_product(v1, v2):
     return sum(map(lambda x: x[0] * x[1], zip(v1, v2)))
 
-def cosine_measure(v1, v2):
+def cosine_similarity(v1, v2):
     prod = dot_product(v1, v2)
     len1 = math.sqrt(dot_product(v1, v1))
     len2 = math.sqrt(dot_product(v2, v2))
@@ -51,15 +51,6 @@ def load_data_wrapper():
 training_data, validation_data, test_data  = load_data_wrapper()
 training_data, validation_data, test_data = list(training_data), list(validation_data), list(test_data)
 
-#x = 0 
-#
-#tt = test_data[0][0]
-#max_sim = 0  
-#result = 0 
-#yy = test_data[0][0]
-
-
-
 
 def NNmodule():
     f_predicted = open('predicted.txt', 'w')
@@ -92,60 +83,71 @@ def NNmodule():
     f_predicted.close()
     f_label.close()
 
-#NNmodule()
 
+mtx = np.zeros((11, 11))
+np.set_printoptions(suppress=True)
 def build_matrix():
-    mtx = np.zeros((11, 11))
-    print(mtx)
     f_predicted = open('predicted.txt', 'r')
     f_label = open('label.txt', 'r')
-    np.set_printoptions(suppress=True)
     for predicted_label in f_predicted:
         true_label = f_label.readline()
         mtx[int(predicted_label)][int(true_label)] += 1
         print(mtx) 
         print("====")
     for i in range(0,10):
-        mtx[i][10] = sum(mtx[i][:9])
-        mtx[10][i] = sum(mtx[:9][i])    
-    
-    
-    
-    
-#build_matrix()
-mtx = np.array([[  978.  ,   0   ,  8.  ,  0   ,  0  ,   1.  ,   3.   ,  1.,     4.   ,  9.,
-      0] ,
- [    1. , 1128.  ,   0    , 0   ,  3.  ,   0  ,   3. ,  11.    , 2.   ,  6.,
-      0],
- [    0   ,  3. , 1005.  ,   1.  ,   1.  ,   0   ,  0 ,    5.   ,  2. ,    1.,
-      0],
- [    0  ,   1.   ,  5. ,  974.  ,   0  ,  19.   ,  0   ,  2. ,   15.  ,   4.,
-      0],
- [    0   ,  1.  ,   0   ,  1.   ,937.   ,  1.   ,  2.  ,   1. ,    2. ,    9.,
-      0],
- [    0   ,  1.   ,  0   , 14. ,   0 ,  847.    , 3.    , 0 ,    4.  ,   2.,
-      0],
- [    0   ,  1.  ,   1.    , 0   ,  6. ,   11. ,  947.   ,  0  ,   5.   ,  1.,
-      0],
- [    1.   ,  0   , 10  ,   4.   ,  2. ,    1.   ,  0 , 997.  ,   5.   ,  9.,
-      0],
- [    0   ,  0    , 2.  ,   8.   ,  1.    , 6.   ,  0  ,   0 ,  931.  ,   4.,
-      0],
- [    0  ,   0  ,   1.  ,   8.   , 32.  ,   6.  ,   0 ,   11.  ,   4. ,  964.,
-      0],
- [    0   ,  0    , 0  ,   0    , 0   ,  0  ,   0   ,  0   ,  0    , 0,
-      0]])
-print(mtx.shape)
-np.set_printoptions(suppress=True)
-for i in range(0,10):
         mtx[i][10] = sum(mtx[i,:10])
         mtx[10][i] = sum(mtx[:10, i])  
-mtx[10][10] =   sum(mtx[10,:10]) + sum(mtx[:10,10])    
-print(mtx)  
+    mtx[10][10] =   sum(mtx[10,:10]) + sum(mtx[:10,10])
+    print("Final confusion matrix:")
+    print(mtx)
+    return mtx    
+    
+def print_analytics(mtx):  
+    print("Accuracy of the system is : " , sum(mtx.diagonal()[:10]) * 100/len(test_data) , "%"  ) 
+    for label in range(0,10):
+        print("Class " , label , ":")
+        print("Precision:" , mtx[label][label] / mtx[label][10])
+        print("Recall:" , mtx[label][label] / mtx[10][label] )  
+    
+#NNmodule()   
+confusion_matrix = build_matrix()
+print_analytics(confusion_matrix)
+
+
+
+
+
+#===============================================================================
+# mtx = np.array([[  978.  ,   0   ,  8.  ,  0   ,  0  ,   1.  ,   3.   ,  1.,     4.   ,  9.,
+#       0] ,
+#  [    1. , 1128.  ,   0    , 0   ,  3.  ,   0  ,   3. ,  11.    , 2.   ,  6.,
+#       0],
+#  [    0   ,  3. , 1005.  ,   1.  ,   1.  ,   0   ,  0 ,    5.   ,  2. ,    1.,
+#       0],
+#  [    0  ,   1.   ,  5. ,  974.  ,   0  ,  19.   ,  0   ,  2. ,   15.  ,   4.,
+#       0],
+#  [    0   ,  1.  ,   0   ,  1.   ,937.   ,  1.   ,  2.  ,   1. ,    2. ,    9.,
+#       0],
+#  [    0   ,  1.   ,  0   , 14. ,   0 ,  847.    , 3.    , 0 ,    4.  ,   2.,
+#       0],
+#  [    0   ,  1.  ,   1.    , 0   ,  6. ,   11. ,  947.   ,  0  ,   5.   ,  1.,
+#       0],
+#  [    1.   ,  0   , 10  ,   4.   ,  2. ,    1.   ,  0 , 997.  ,   5.   ,  9.,
+#       0],
+#  [    0   ,  0    , 2.  ,   8.   ,  1.    , 6.   ,  0  ,   0 ,  931.  ,   4.,
+#       0],
+#  [    0  ,   0  ,   1.  ,   8.   , 32.  ,   6.  ,   0 ,   11.  ,   4. ,  964.,
+#       0],
+#  [    0   ,  0    , 0  ,   0    , 0   ,  0  ,   0   ,  0   ,  0    , 0,
+#       0]])
+#===============================================================================
+
+ 
+
 #----------------------------------------------------- for row in training_data:
     #----------------------------------------------------------------- x = x + 1
     #------------------------------------------------------------------ print(x)
-    #----------------------------------------- #sim = cosine_measure(row[0], yy)
+    #----------------------------------------- #sim = cosine_similarity(row[0], yy)
     #----------------------------- sim = 1 - spatial.distance.cosine(row[0], yy)
     #--------------------------------------------------------- if sim > max_sim:
         #--------------------------------------------------------- max_sim = sim
