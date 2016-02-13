@@ -50,11 +50,11 @@ def load_data_wrapper():
 
 training_data, validation_data, test_data  = load_data_wrapper()
 training_data, validation_data, test_data = list(training_data), list(validation_data), list(test_data)
-x = 0 
+x = 0
 
 tt = test_data[0][0]
-max_sim = 0  
-result = 0 
+max_sim = 0
+result = 0
 yy = test_data[0][0]
 
 
@@ -83,6 +83,13 @@ def NNmodule():
 
 NNmodule()
 
+def build_matrix():
+    mtx = np.zeros((11, 11))
+    print(mtx)
+    predicated_label=0
+    test_label=0
+    mtx[predicated_label][test_label] += 1 
+    print(mtx)
 #----------------------------------------------------- for row in training_data:
     #----------------------------------------------------------------- x = x + 1
     #------------------------------------------------------------------ print(x)
