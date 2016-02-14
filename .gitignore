@@ -5,3 +5,4 @@ report/*.aux
 report/main.log
 report/main.out
 report/main.toc
+*.log

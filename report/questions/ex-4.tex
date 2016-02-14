@@ -1,0 +1,20 @@
+\section*{Exercise 4}
+In this exercise, we prove the triangle inequality property of Jaccard distance by using the minhash property. That is, the Jaccard distance equals the probability that two sets do not minhash to the same value. 
+
+Let's $A,B,C$ be our 3 sets. After constructing the signature matrix, it is inferred from the lecture that:
+
+$$d_j(A,B) = P(minhash(A) \neq minhash(B)) = \frac{|minhash(A) \neq minhash(B)|}{|All Permutations|}$$
+$$d_j(A,C) = P(minhash(A) \neq minhash(C)) = \frac{|minhash(A) \neq minhash(C)|}{|All Permutations|}$$
+$$d_j(C,B) = P(minhash(C) \neq minhash(B)) = \frac{|minhash(C) \neq minhash(B)|}{|All Permutations|}$$
+
+It is obvious that $minhash(C)$ can be $minhash(A)$, $minhash(B)$, or another value. Then, when $minhash(A) \neq minhash(B)$, either $minhash(C) \neq minhash(A)$, or $minhash(C) \neq minhash(B)$, or $minhash(C) \neq minhash(A) \neq minhash(B)$ is true.
+
+Thus, $|minhash(A) \neq minhash(B)| \leq |minhash(A) \neq minhash(C)| + |minhash(C) \neq minhash(B)|$, which gives:
+
+$$\frac{|minhash(A) \neq minhash(B)|}{|All Permutations|} \leq \frac{|minhash(A) \neq minhash(C)|}{|All Permutations|} + \frac{|minhash(C) \neq minhash(B)|}{|All Permutations|}  $$
+
+This is equivalent to:
+
+$$P(minhash(A) \neq minhash(B)) \leq P(minhash(A) \neq minhash(C)) + P(minhash(C) \neq minhash(B))$$
+
+Which completes the proof.

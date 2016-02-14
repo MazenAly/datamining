@@ -30,5 +30,5 @@ Now we perform the cyclic permutation.
     \item e-a-b-c-d: The signature is 1 - 1.
 \end{itemize}
 
-We have 2 rows which contain the same values on 2 cells, and 5 rows in total. So the estimated Jaccard similarity is $2/5$, which is not correct. The reason is the $0 - 0$ row, which makes the next rows to be counted twice while every row is counted only once in the total number of permutations.
+We have 2 rows which contain the same values on 2 cells, and 5 rows in total. So the estimated Jaccard similarity is $2/5$, which is not correct. The reason is the $0 - 0$ row, which makes the next rows to be counted twice in the intersection (while every row is counted only once in the total number of permutations).
 
