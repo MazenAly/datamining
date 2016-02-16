@@ -13,6 +13,7 @@ from sklearn import metrics
 from scipy import spatial
 import time 
 import math
+import sys
 
 
 # function that takes two vectors and return the dot product value of it by summing the multiplication of each two elements 
@@ -25,9 +26,6 @@ def cosine_similarity(v1, v2):
     len1 = math.sqrt(dot_product(v1, v1))
     len2 = math.sqrt(dot_product(v2, v2))
     return prod / (len1 * len2)
-
-
-
 
 def load_data():
     f = gzip.open('./data1a/mnist.pkl.gz', 'rb')
@@ -51,10 +49,6 @@ def load_data_wrapper():
     test_data = zip(test_inputs, te_d[1])
     return training_data, validation_data, test_data
 
-
-
-
-
 training_data, validation_data, test_data  = load_data_wrapper()
 training_data, validation_data, test_data = list(training_data), list(validation_data), list(test_data) # for transforming the zip objects to lists
 
@@ -65,6 +59,7 @@ def NNClassifier():
     f_label = open('label.txt', 'w')
     #for each test entry, we will loop on every training entry and check if 'ts the closest neighbor so far or not.
     for test_entry in test_data:
+        start_time = time.time()
         test_features = test_entry[0]    
         test_label = test_entry[1]
         # defining variables to save the closest neighbor
@@ -91,6 +86,7 @@ def NNClassifier():
         else:
             print("fail")
         print("=============")
+        print('duration', time.time() - start_time)
     # closing the files
     f_predicted.close()
     f_label.close()
@@ -127,23 +123,29 @@ def print_analytics(mtx):
         # the recall is measured by dividing the true positives by the summation of true positives and false negatives of this class  
         print("Recall:" , mtx[label][label] / mtx[10][label] )  
     
-#NNClassifier()   
+# using scikit learn to do k-neighbor classification
+def nn_scikit_learn():
+    print("===========Scikit learn Knn=======================")
+    training_data, validation_data, test_data  = load_data()
+    training_data, validation_data, test_data = list(training_data), list(validation_data), list(test_data)
+    start_time = time.time() 
+    # defining Scikit learn K neighbors classifier with metric cosine, and number of neighbors to check as just 1 with algorithm brute 
+    #instead of the default 'auto' as this option works with the cosine metric
+    knn = KNeighborsClassifier(n_neighbors = 1 , metric = 'cosine' , algorithm='brute' )
+    # fit function takes the training feature as the first argument and training labels as second argument
+    knn.fit(training_data[0] , training_data[1])
+    # getting the predicted labels for the test data.
+    Y_pred = knn.predict(test_data[0])
+    #measuring the accuracy
+    print(metrics.accuracy_score(test_data[1] ,Y_pred))
+    end_time = time.time()
+    print("elapsed time: " , end_time - start_time)
+
+if len(sys.argv) > 1:
+    nn_scikit_learn()
+else:
+    NNClassifier()   
+
 #confusion_matrix = build_matrix()
 #print_analytics(confusion_matrix)
 
-
-print("===========Scikit learn Knn=======================")
-training_data, validation_data, test_data  = load_data()
-training_data, validation_data, test_data = list(training_data), list(validation_data), list(test_data)
-start_time = time.time() 
-# defining Scikit learn K neighbors classifier with metric cosine, and number of neighbors to check as just 1 with algorithm brute 
-#instead of the default 'auto' as this option works with the cosine metric
-knn = KNeighborsClassifier(n_neighbors = 1 , metric = 'cosine' , algorithm='brute' )
-# fit function takes the training feature as the first argument and training labels as second argument
-knn.fit(training_data[0] , training_data[1])
-# getting the predicted labels for the test data.
-Y_pred = knn.predict(test_data[0])
-#measuring the accuracy
-print(metrics.accuracy_score(test_data[1] ,Y_pred))
-end_time = time.time()
-print("elapsed time: " , end_time - start_time)
