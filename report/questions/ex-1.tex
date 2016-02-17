@@ -1,7 +1,7 @@
 \section*{Exercise 1}
 In this assignment, we implement the nearest neighbor classifier using the cosine distance to recognize handwritten digits. 
 
-We try three approaches for this task. The first one is implementing everything from scratch, the second one is using Scipy library just to measure the cosine similarity, and the third technique is using Scikit Learn library only for making comparison and validating our implementation.
+We try three approaches for this task. The first one is implementing everything from scratch, the second one is using Numpy library to compute the dot products and hanle the math operations, and the third technique is using Scikit Learn library only for making comparison and validating our implementation.
 
 It worth noting that we changed the original code a little bit for running it in Python 3.5 as it was Python 2.7. The code is available in the Github repository \url{https://github.com/MazenAly/datamining} .
 
@@ -13,15 +13,16 @@ test data point, we loop on all the training points and find the one which has t
 We then build the confusion matrix of all the labels (digits form 0 to 9). The accuracy is measured by dividing the number of correct predictions by the total number of predictions, the precision is measured by dividing the true positives by the summation of true positives and false positives of each class, and the recall is measured by dividing the true positives by the summation of true positives and false negatives of each class. The detailed code of the nearest-neighbor module is shown in the code snippet below. The full version is accessible via the Github repository.
 
 \begin{lstlisting}[frame=single]
+# Manual dot product
 def dot_product(v1, v2):
     return sum(map(lambda x: x[0] * x[1], zip(v1, v2)))
 
 def cosine_similarity(v1, v2):
-    prod = dot_product(v1, v2)
+    prod = np.dot(v1, v2)
     # len and len2 are the magnitudes of the 2 vectors
-    len1 = math.sqrt(dot_product(v1, v1))
-    len2 = math.sqrt(dot_product(v2, v2))
-    return prod / (len1 * len2)
+    len1 = np.sqrt(np.dot(v1, v1))
+    len2 = np.sqrt(np.dot(v2, v2))
+    return np.divide(prod , np.multiply(len1 , len2))
 
 def NNClassifier():
     #opening two files for writing the predications and the true labels.
@@ -38,7 +39,7 @@ def NNClassifier():
         for training_entry in training_data:
             training_entry_features = training_entry[0]
             #measuring the cosine similarity using scipy library
-            sim = 1 - spatial.distance.cosine(training_entry_features, test_features)
+            sim = cosine_similarity(training_entry_features, test_features)
 	    # if this entry has the max similarity so far then 
 	    # save this entry as nearest neighbor
             if sim > max_sim: 
@@ -61,7 +62,7 @@ Class ``9'' has the worst precision, 0.93. According to the confusion matrix, 32
 
 Class ``5'' has the worst recall, 0.94. According to the confusion matrix, 19 instances of class ``5'' are mis-classified as ``3''. The previous explanation might still be possible for this case.
 
-Regarding the runtime, when we use our own implementation of cosine similarity as shown in the code, it takes 120 seconds on average to process an instance, which results in an estimated runtime of 333 hours in total. It is too slow. Therefore, we try using the Scipy library to compute the cosine values. The performance is much improved, when it takes only 1.8 seconds on average to handle an instance, which results in only 5 hours to classify the whole test set. 
+Regarding the runtime, when we use our own implementation of cosine similarity as shown in the code, it takes 120 seconds on average to process an instance, which results in an estimated runtime of 333 hours in total. It is too slow. That is why we try using the Numpy library to handle the math. The performance is much improved, when it takes only 0.3 seconds on average to handle an instance, which results in only an hour to classify the whole test set. 
 
 \begin{table}[h]
   \centering

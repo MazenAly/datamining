@@ -17,15 +17,15 @@ import sys
 
 
 # function that takes two vectors and return the dot product value of it by summing the multiplication of each two elements 
-def dot_product(v1, v2):
-    return sum(map(lambda x: x[0] * x[1], zip(v1, v2)))
+#def dot_product(v1, v2):
+#    return sum(map(lambda x: x[0] * x[1], zip(v1, v2)))
 
 def cosine_similarity(v1, v2):
-    prod = dot_product(v1, v2)
+    prod = np.dot(v1, v2)
     # len and len2 are the magnitudes of the 2 vectors
-    len1 = math.sqrt(dot_product(v1, v1))
-    len2 = math.sqrt(dot_product(v2, v2))
-    return prod / (len1 * len2)
+    len1 = np.sqrt(np.dot(v1, v1))
+    len2 = np.sqrt(np.dot(v2, v2))
+    return np.divide(prod , np.multiply(len1 , len2))
 
 def load_data():
     f = gzip.open('./data1a/mnist.pkl.gz', 'rb')
@@ -49,8 +49,11 @@ def load_data_wrapper():
     test_data = zip(test_inputs, te_d[1])
     return training_data, validation_data, test_data
 
+
 training_data, validation_data, test_data  = load_data_wrapper()
 training_data, validation_data, test_data = list(training_data), list(validation_data), list(test_data) # for transforming the zip objects to lists
+training_data = [[entry[0].flatten(), entry[1]] for entry in training_data]
+test_data = [[entry[0].flatten(), entry[1]] for entry in test_data]
 
 #module for digits classification using nearest neighbor classifier
 def NNClassifier():
@@ -68,7 +71,8 @@ def NNClassifier():
         for training_entry in training_data:
             training_entry_features = training_entry[0]
             #measuring the cosine similarity using scipy library
-            sim = 1 - spatial.distance.cosine(training_entry_features, test_features)
+            #sim = 1 - spatial.distance.cosine(training_entry_features, test_features)
+            sim = cosine_similarity(training_entry_features, test_features)
             if sim > max_sim: # if this entry has the max similarity so far then safe this entry as nearest neighbor
                 max_sim = sim 
                 nearest_neighbor = training_entry
