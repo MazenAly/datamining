@@ -1,7 +1,9 @@
 import numpy as np
 from plotting import *
+import math
+import dataloader_1b as mn 
 
-MAX_NUMBER = 99999999999
+MAX_NUMBER = math.inf
 
 def load_data_1b(fpath):
     data = []
@@ -11,7 +13,7 @@ def load_data_1b(fpath):
         data.append(words)
     f.close()
     arr = np.array(data, dtype=np.float64)
-    return arr[:, 1:]
+    return arr[:, 0:]
 
 def cluster_distance(cluster1, cluster2):
     center1 = np.average(cluster1)
@@ -40,6 +42,8 @@ def chooseKCenter(data, k):
     return seeds
 
 def kmeans(data, k, method):
+    original_data = data 
+    data = data[: , 1:]
     if method == 'firstk':
         seeding_points = data[0:k]
     elif method == 'random':
@@ -47,6 +51,8 @@ def kmeans(data, k, method):
         seeding_points = [data[i] for i in random_indices]
     elif method == 'kmeans++':
         seeding_points = chooseKCenter(data, k)
+    else:
+        seeding_points = mn.gonzales(original_data , k)
         
 
     old_clusters = [[]]
@@ -96,5 +102,6 @@ if __name__ == "__main__":
     c1 = load_data_1b("./data1b/C2.txt")
     #result = kmeans(c1, 2, 'firstk')
     #result = kmeans(c1, 3, 'random')
-    result = kmeans(c1, 3, 'kmeans++')
+    #result = kmeans(c1, 3, 'kmeans++')
+    result = kmeans(c1,3, 'gonz')
     scatterplot(result)
