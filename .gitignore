@@ -6,3 +6,4 @@ report/main.log
 report/main.out
 report/main.toc
 *.log
+assignment-1b/__pycache__/*
