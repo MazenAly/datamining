@@ -1,7 +1,10 @@
 import numpy as np
 from plotting import *
+from scipy import spatial
+import math
+import sys
 
-MAX_NUMBER = 99999999999
+MAX_NUMBER = math.inf 
 
 def load_data_1b(fpath):
     data = []
@@ -11,31 +14,41 @@ def load_data_1b(fpath):
         data.append(words)
     f.close()
     arr = np.array(data, dtype=np.float64)
-    return arr[:, 1:]
+    return arr[:, 1:] 
 
 def cluster_distance(cluster1, cluster2):
-    center1 = np.average(cluster1)
-    center2 = np.average(cluster2)
-    
+    center1 = np.average(cluster1,0)
+    center2 = np.average(cluster2,0)
+
+    if np.isnan(center1).any():
+        center1 = [0,0]
+    if np.isnan(center2).any():
+        center2 = [0,0]
+
     return np.linalg.norm(center1 - center2)
 
-def chooseKCenter(data, k):
+def choose_k_center(data, k):
+    data_clone = np.copy(data)
     seeds = [data[np.random.random_integers(len(data) - 1)]]
-    distances = []
     for r in range(1,k):
-        for point in data:
+        distances = []
+        for point in data_clone:
             min_dist = MAX_NUMBER
             for i in range(r):
                 dist = np.linalg.norm(point - seeds[i])
                 if dist < min_dist:
                     min_dist = dist
+            
             distances.append(np.power(min_dist, 2))
 
-        for i in range(len(data)):
-            prob = np.divide(distances[i], np.sum(distances))
-            if np.random.random_sample() >= prob:
-                seeds.append(data[i])
-                break
+        random_number = np.random.random_sample()
+        prob = 0
+        for i in range(len(data_clone)):
+            prob = prob + np.divide(distances[i], np.sum(distances))
+            if random_number <= prob:
+                seeds.append(data_clone[i])
+                data_clone = np.delete(data_clone, i, 0)
+                break;
 
     return seeds
 
@@ -46,22 +59,17 @@ def kmeans(data, k, method):
         random_indices = np.random.random_integers(len(data) - 1, size = (1,k)).flatten()
         seeding_points = [data[i] for i in random_indices]
     elif method == 'kmeans++':
-        seeding_points = chooseKCenter(data, k)
+        seeding_points = choose_k_center(data, k)
         
 
     old_clusters = [[]]
     new_clusters = [[] for i in range(k)]
-    old_cost = np.array([0 for i in range(k)])
-    new_cost = np.array([1 for i in range(k)])
-    #while(not np.array_equal(old_cost, new_cost)):
-
     while True:
-    #for i in range(100):
         print('process next round')
         print('seeding_points', seeding_points)
         old_clusters = new_clusters
         new_clusters = [[] for i in range(k)]
-        old_cost = new_cost
+        cost = 0
         for point in data:
             min_dist = MAX_NUMBER
             current_index = 0
@@ -72,19 +80,12 @@ def kmeans(data, k, method):
                     min_dist = dist
                     current_index = i
             new_clusters[current_index].append(point)
+            cost += np.power(np.linalg.norm(point - seeding_points[current_index]), 2)
          
         print('==============')
-        print('average 0', np.average(new_clusters[0]))
-        print('average 1', np.average(new_clusters[1]))
-        print('average 2', np.average(new_clusters[1]))
-        new_seeds = [np.average(new_clusters[i]) for i in range(k)]
-        seeding_points = new_seeds
-
+        seeding_points = [np.average(new_clusters[i],0) for i in range(k)]
         distance = np.sum([cluster_distance(old_clusters[i], new_clusters[i]) for i in range(k)])
-        print(distance)
-        #for i in range(k):
-        #    distance = 0
-        #    distance = distance + cluster_distance(old_clusters[i], new_clusters[i])
+        print('cost', cost)
         
         if distance == 0:
             break
@@ -94,7 +95,5 @@ def kmeans(data, k, method):
 
 if __name__ == "__main__":
     c1 = load_data_1b("./data1b/C2.txt")
-    #result = kmeans(c1, 2, 'firstk')
-    #result = kmeans(c1, 3, 'random')
-    result = kmeans(c1, 3, 'kmeans++')
+    result = kmeans(c1, int(sys.argv[1]), sys.argv[2])
     scatterplot(result)

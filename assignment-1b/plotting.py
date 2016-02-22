@@ -1,15 +1,28 @@
 from matplotlib import pyplot
 from numpy import arange
 import bisect
+import math
 color = ['b.','r.','g.','y.', 'm.']
 
 def scatterplot(data):
+    min_x = min_y = math.inf;
+    max_x = max_y = -math.inf;
+
     for i in range(len(data)):
         cluster = data[i]
         for point in cluster:
             pyplot.plot(point[0],point[1], color[i])
-    #pyplot.xlim(min(x)-1,max(x)+1)
-    #pyplot.ylim(min(y)-1,max(y)+1)
+            if point[0] > max_x:
+                max_x = point[0]
+            if point[0] < min_x:
+                min_x = point[0]
+            if point[1] > max_y:
+                max_y = point[1]
+            if point[1] < min_y:
+                min_y = point[1]
+
+    pyplot.xlim(min_x-1,max_x+1)
+    pyplot.ylim(min_y-1,max_y+1)
     pyplot.show()
 
 def barplot(labels,data):
