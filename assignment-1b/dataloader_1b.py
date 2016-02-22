@@ -1,11 +1,12 @@
 import numpy as np
 from pandas import Series,DataFrame
 import pandas as pd
-from sklearn import metrics
+import  sklearn.cluster 
 from scipy import spatial
 import dis
 import math
-
+import matplotlib.pyplot as plt
+from random import randint
 
 def load_data_1b(fpath):
     data = []
@@ -25,8 +26,11 @@ def gonzales(data , k):
     points_list["center"] = np.nan
     distance_column_index = points_list.columns.get_loc("distance")
     #choosing a random point as the first center
-    center0 =     points_list.sample(n=1, random_state=0, axis=0)
+
+    center0 =     points_list.sample(n=1 , random_state = randint(0,100) , axis=0)
     centers_list = DataFrame(center0.drop(['distance' , 'center'] , axis = 1))
+    centers_list['color'] = 'r'
+    colors = "bgcmykw"
     print(centers_list)
     print("==============Initialization finished===========")
     #looping k-1 time to have k centers
@@ -51,12 +55,42 @@ def gonzales(data , k):
                 next_cluster = indexp 
             
         centers_list = centers_list.append(points_list.ix[[next_cluster], :distance_column_index   ])
+        centers_list.set_value(next_cluster, 'color', colors[k_cycle])
         print(centers_list)
         print("==============Cycle finished===========")
     centers_list.drop(centers_list.tail(1).index, inplace=True)
+    centers_list.drop(['color'], axis=1 ,inplace=True)
+
+
+    centers_list.plot(kind='scatter', x=0, y=1 , c='r'   )
+    points_list.plot(kind='scatter', x=0, y=1 , c='center' , s= points_list['center'] *2   )
+    plt.show()
+
     print(points_list)
+    return centers_list.as_matrix(columns=[0 ,1])
+
+def kmeans_scikit(data , k):
+    points_list = DataFrame(data[:, 1:] , index = data[ : , 0])
+    mat = points_list.as_matrix()
+    print(mat)
+    # Using sklearn
+    km = sklearn.cluster.KMeans(n_clusters=k)
+    km.fit(mat)
+    # Get cluster assignment labels
+    labels = km.labels_
+    print(labels)
+    print('==============')
+    print(km.predict([[20 ,-15]]))
+    # Format results as a DataFrame
+    #results = pd.DataFrame([points_list.index,labels]).T
+    points_list['labels'] = labels
+    points_list.plot(kind='scatter', x=0, y=1    , c='labels'  )
+    plt.show()
+    print(points_list)
+
 if __name__ == "__main__":
     c1 = load_data_1b("./data1b/C1.txt")
     c2 = load_data_1b("./data1b/C2.txt")
     c3 = load_data_1b("./data1b/C3.txt")
-    gonzales(c3, 4)
+    kmeans_scikit(c1 , 4)
+    #gonzales(c1, 4)

@@ -5,6 +5,8 @@ import math
 import sys
 
 MAX_NUMBER = math.inf 
+import math
+import dataloader_1b as mn 
 
 def load_data_1b(fpath):
     data = []
@@ -14,7 +16,7 @@ def load_data_1b(fpath):
         data.append(words)
     f.close()
     arr = np.array(data, dtype=np.float64)
-    return arr[:, 1:] 
+    return arr[:, 0:]
 
 def cluster_distance(cluster1, cluster2):
     center1 = np.average(cluster1,0)
@@ -53,6 +55,8 @@ def choose_k_center(data, k):
     return seeds
 
 def kmeans(data, k, method):
+    original_data = data 
+    data = data[: , 1:]
     if method == 'firstk':
         seeding_points = data[0:k]
     elif method == 'random':
@@ -60,7 +64,8 @@ def kmeans(data, k, method):
         seeding_points = [data[i] for i in random_indices]
     elif method == 'kmeans++':
         seeding_points = choose_k_center(data, k)
-        
+    else:
+        seeding_points = mn.gonzales(original_data , k)
 
     old_clusters = [[]]
     new_clusters = [[] for i in range(k)]
