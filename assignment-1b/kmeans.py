@@ -6,7 +6,7 @@ import sys
 
 MAX_NUMBER = math.inf 
 import math
-import dataloader_1b as mn 
+import gonzales as mn 
 
 def load_data_1b(fpath):
     data = []
