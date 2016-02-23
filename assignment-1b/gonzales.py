@@ -98,5 +98,5 @@ if __name__ == "__main__":
     c1 = load_data_1b("./data1b/C1.txt")
     c2 = load_data_1b("./data1b/C2.txt")
     c3 = load_data_1b("./data1b/C3.txt")
-    kmeans_scikit(c1 , 4)
-    #gonzales(c1, 4)
+    #kmeans_scikit(c1 , 4)
+    gonzales(c2, 3)
