@@ -3,7 +3,7 @@ from plotting import *
 from scipy import spatial
 import math
 import sys
-
+import matplotlib.pyplot as plt
 MAX_NUMBER = math.inf 
 import math
 import dataloader_1b as mn 
@@ -70,8 +70,10 @@ def kmeans(data, k, method):
     old_clusters = [[]]
     new_clusters = [[] for i in range(k)]
     while True:
-        print('process next round')
-        print('seeding_points', seeding_points)
+        #=======================================================================
+        # print('process next round')
+        # print('seeding_points', seeding_points)
+        #=======================================================================
         old_clusters = new_clusters
         new_clusters = [[] for i in range(k)]
         cost = 0
@@ -87,18 +89,58 @@ def kmeans(data, k, method):
             new_clusters[current_index].append(point)
             cost += np.power(np.linalg.norm(point - seeding_points[current_index]), 2)
          
-        print('==============')
+        #print('==============')
         seeding_points = [np.average(new_clusters[i],0) for i in range(k)]
         distance = np.sum([cluster_distance(old_clusters[i], new_clusters[i]) for i in range(k)])
-        print('cost', cost)
+        #print('cost', cost)
         
         if distance == 0:
             break
 
-    return new_clusters
+    return new_clusters, cost
 
 
+
+def run_analysis():
+    print("analytics")
+    clusters_no = [3,4,5]
+    data = load_data_1b("./data1b/C2.txt")
+    methods = ['firstk' ,'random' ,'kmeans++' ,'gonzales']
+        
+    for m in methods:
+        print("method ================================================" , m)
+        k_scores = []
+        
+        for k in clusters_no:
+            print("clusters " , k)
+            all_scores_k = []
+            for i in range(0,3):
+                result , cost = kmeans(data, k, m)
+                #scatterplot(result)
+                all_scores_k.append(cost)
+            avg_cost=np.array(all_scores_k).mean()
+            k_scores.append(avg_cost)
+            print("Avg cost for " , m , 'and clusters no ' , k , " is " , avg_cost)
+        
+        
+        
+        plt.plot(clusters_no, k_scores , label= m)
+        plt.xticks(clusters_no)
+        plt.xlabel('Value of K for Kmeans')
+        plt.ylabel('Cost')
+        # Now add the legend with some customizations.
+        legend = plt.legend(loc='upper center', shadow=True)
+
+        # The frame is matplotlib.patches.Rectangle instance surrounding the legend.
+        frame = legend.get_frame()
+        frame.set_facecolor('0.90')
+    plt.show()
+    
+    
+    
+    
 if __name__ == "__main__":
     c1 = load_data_1b("./data1b/C2.txt")
-    result = kmeans(c1, int(sys.argv[1]), sys.argv[2])
-    scatterplot(result)
+    run_analysis()
+    #result = kmeans(c1, int(sys.argv[1]), sys.argv[2])
+    #scatterplot(result)

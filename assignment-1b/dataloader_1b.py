@@ -31,8 +31,10 @@ def gonzales(data , k):
     centers_list = DataFrame(center0.drop(['distance' , 'center'] , axis = 1))
     centers_list['color'] = 'r'
     colors = "bgcmykw"
-    print(centers_list)
-    print("==============Initialization finished===========")
+    #===========================================================================
+    # print(centers_list)
+    # print("==============Initialization finished===========")
+    #===========================================================================
     #looping k-1 time to have k centers
     for k_cycle in range(1,k+1):
         # varibles to save the next center to be chosen based on the maximum distance a point makes within its cluster
@@ -56,17 +58,21 @@ def gonzales(data , k):
             
         centers_list = centers_list.append(points_list.ix[[next_cluster], :distance_column_index   ])
         centers_list.set_value(next_cluster, 'color', colors[k_cycle])
-        print(centers_list)
-        print("==============Cycle finished===========")
+        #=======================================================================
+        # print(centers_list)
+        # print("==============Cycle finished===========")
+        #=======================================================================
     centers_list.drop(centers_list.tail(1).index, inplace=True)
     centers_list.drop(['color'], axis=1 ,inplace=True)
 
 
-    centers_list.plot(kind='scatter', x=0, y=1 , c='r'   )
-    points_list.plot(kind='scatter', x=0, y=1 , c='center' , s= points_list['center'] *2   )
-    plt.show()
+    #===========================================================================
+    # centers_list.plot(kind='scatter', x=0, y=1 , c='r'   )
+    # points_list.plot(kind='scatter', x=0, y=1 , c='center' , s= points_list['center'] *2   )
+    # plt.show()
+    #===========================================================================
 
-    print(points_list)
+    #print(points_list)
     return centers_list.as_matrix(columns=[0 ,1])
 
 def kmeans_scikit(data , k):
