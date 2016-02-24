@@ -6,7 +6,7 @@ import sys
 import matplotlib.pyplot as plt
 MAX_NUMBER = math.inf 
 import math
-import dataloader_1b as mn 
+import gonzales as mn 
 
 def load_data_1b(fpath):
     data = []
@@ -27,7 +27,7 @@ def cluster_distance(cluster1, cluster2):
     if np.isnan(center2).any():
         center2 = [0,0]
 
-    return np.linalg.norm(center1 - center2)
+    return np.linalg.norm(np.array(center1) - np.array(center2))
 
 def choose_k_center(data, k):
     data_clone = np.copy(data)
@@ -69,6 +69,8 @@ def kmeans(data, k, method):
 
     old_clusters = [[]]
     new_clusters = [[] for i in range(k)]
+    
+    costs_array = []
     while True:
         #=======================================================================
         # print('process next round')
@@ -93,11 +95,11 @@ def kmeans(data, k, method):
         seeding_points = [np.average(new_clusters[i],0) for i in range(k)]
         distance = np.sum([cluster_distance(old_clusters[i], new_clusters[i]) for i in range(k)])
         #print('cost', cost)
-        
+        costs_array.append(cost)
         if distance == 0:
             break
 
-    return new_clusters, cost
+    return new_clusters, cost , costs_array
 
 
 
@@ -109,31 +111,57 @@ def run_analysis():
         
     for m in methods:
         print("method ================================================" , m)
-        k_scores = []
-        
+        k_costs= []
+        k_std= []
         for k in clusters_no:
             print("clusters " , k)
             all_scores_k = []
-            for i in range(0,3):
-                result , cost = kmeans(data, k, m)
+            plt.figure(1)  
+            longest_run = 0
+            for i in range(0,5):
+                result , cost , costs_array = kmeans(data, k, m)
+                plt.plot(range(0,len(costs_array)), costs_array  , label = 'run '+ str(i) )
+                plt.legend(loc='upper right', shadow=True) 
+                plt.xlabel('Steps by ' + str(m) + ' method for ' + str(k) +' clusters')
+                if longest_run < len(costs_array):
+                    longest_run = len(costs_array)
+                    plt.xticks(range(0,longest_run))
+                
+                plt.ylabel('Cost')
                 #scatterplot(result)
                 all_scores_k.append(cost)
+            plt.show()
             avg_cost=np.array(all_scores_k).mean()
-            k_scores.append(avg_cost)
+            print(*all_scores_k)
+            std = np.std(np.array(all_scores_k))
+            k_costs.append(avg_cost)
+            k_std.append(std)
             print("Avg cost for " , m , 'and clusters no ' , k , " is " , avg_cost)
+            print("Standard Deviation " , m , 'and clusters no ' , k , " is " , std)
+               
         
-        
-        
-        plt.plot(clusters_no, k_scores , label= m)
-        plt.xticks(clusters_no)
-        plt.xlabel('Value of K for Kmeans')
-        plt.ylabel('Cost')
-        # Now add the legend with some customizations.
-        legend = plt.legend(loc='upper center', shadow=True)
 
-        # The frame is matplotlib.patches.Rectangle instance surrounding the legend.
-        frame = legend.get_frame()
-        frame.set_facecolor('0.90')
+        #=======================================================================
+        # legend = 
+        # # The frame is matplotlib.patches.Rectangle instance surrounding the legend.
+        # frame = legend.get_frame()
+        # frame.set_facecolor('0.90')
+        #=======================================================================
+        
+        #-------------------------------------------------- plt.subplot(2, 1, 1)
+        #----------------------------- plt.plot(clusters_no, k_costs , label= m)
+        #----------------------------------------------- plt.xticks(clusters_no)
+        #-------------------------------------- plt.xlabel('Clusters number K ')
+        #---------------------------------------------------- plt.ylabel('Cost')
+        #---------------------------- plt.legend(loc='upper right', shadow=True)
+#------------------------------------------------------------------------------ 
+        #-------------------------------------------------- plt.subplot(2, 1, 2)
+        #------------------------------- plt.plot(clusters_no, k_std , label= m)
+        #----------------------------------------------- plt.xticks(clusters_no)
+        #-------------------------------------- plt.xlabel('Clusters number K ')
+        #-------------------------------------- plt.ylabel('Standard Deviation')
+             
+        
     plt.show()
     
     
