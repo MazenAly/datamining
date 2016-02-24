@@ -6,9 +6,7 @@ We developed four methods for initializing the first K cluster centroids (where 
 The first one is just choosing the first K data points to be the centroids, the second method is randomized selections of the initial centroids. the third method is k-means++
 and the fourth method is using Gonzales’ algorithm.
 
-For each method, we run k-means for different values of k {3,4,5} and in randomized methods, we run that 5 times. we visualise the results to get more understanding and learning experience as shown below.
-
-<<<<<<< HEAD
+For each method, we run k-means for different values of k {3,4,5} and in randomized methods, we run that 5 times. we visualise the results to get more understanding and learning experience as shown below. In figure \ref{clustering_result}, we shows the k-means clustering result on the dataset C2.txt with various initialization strategies and different values of $k$.
 
 \begin{figure}[!htb]
 \centering
@@ -21,37 +19,12 @@ The top digram of figure \ref{std_mean} shows the average cost of 5 runs of each
 
 The bottom figure shows standard deviation of the costs across all the 5 runs. and we can see the random initialization can have higher standard deviation which means that one or more of the runs can be highly deviated from average of the runs.
 
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
-In figure \ref{clustering_result}, we shows the k-means clustering result on the dataset C2.txt with various initialization strategies and different values of $k$.
->>>>>>> 622c680ca00ea85ebca6ac28052445103e1ac09d
-
-
-
-
-
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.9\textwidth]{shots/firstk5clusters.png}
 \caption{ }
 \label{firstk5clusters}
 \end{figure}
-
 
 Figure \ref{firstk5clusters} shows the convergent rate of k-means algorithm using the first 5 points as the initial centroids, we can see that of course it will be same if run this several times as no randomization exists.
 
@@ -135,15 +108,6 @@ Doing the same for the random method we can see in figures \ref{random3clusters}
   
 
 For kmeans++ we ran the algorithm 5 times for each different clusters number to visualize the convergence rate as in figures \ref{kmeans++3clusters} , \ref{kmeans++4clusters} and \ref{kmeans++5clusters}. We can that the rates are also diverse across diffrent runs but on average k-means converge in less number of steps due to the intelligence of kmeans++ and choosing the initial centroids. 
-
-
-
-
-
-
-
-
-
 
 \begin{figure}
 % hspace*{-0.2\textwidth}
