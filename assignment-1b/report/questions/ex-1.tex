@@ -8,6 +8,7 @@ and the fourth method is using Gonzales’ algorithm.
 
 For each method, we run k-means for different values of k {3,4,5} and in randomized methods, we run that 5 times. we visualise the results to get more understanding and learning experience as shown below.
 
+<<<<<<< HEAD
 
 \begin{figure}[!htb]
 \centering
@@ -36,6 +37,9 @@ The bottom figure shows standard deviation of the costs across all the 5 runs. a
 
 
 
+=======
+In figure \ref{clustering_result}, we shows the k-means clustering result on the dataset C2.txt with various initialization strategies and different values of $k$.
+>>>>>>> 622c680ca00ea85ebca6ac28052445103e1ac09d
 
 
 
@@ -141,8 +145,80 @@ For kmeans++ we ran the algorithm 5 times for each different clusters number to 
 
 
 
-
-
-
-
-
+\begin{figure}
+% hspace*{-0.2\textwidth}
+  \begin{subfigure}{.33\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{shots/clusters-firstk-3}
+    \caption{Kmeans by picking first 3 points}
+    \label{1-trilinear-compositing}
+  \end{subfigure}
+  \begin{subfigure}{.33\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{shots/clusters-firstk-4}
+    \caption{Kmeans by picking first 4 points}
+    \label{1-trilinear-compositing}
+  \end{subfigure}
+  \begin{subfigure}{.33\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{shots/clusters-firstk-5}
+    \caption{Kmeans by picking first 5 points}
+    \label{1-trilinear-compositing}
+  \end{subfigure}
+  \begin{subfigure}{.33\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{shots/clusters-random-3}
+    \caption{Kmeans by picking first 3 random points}
+    \label{1-trilinear-compositing}
+  \end{subfigure}
+  \begin{subfigure}{.33\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{shots/clusters-random-4}
+    \caption{Kmeans by picking first 4 random points}
+    \label{1-trilinear-compositing}
+  \end{subfigure}
+  \begin{subfigure}{.33\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{shots/clusters-random-5}
+    \caption{Kmeans by picking first 5 random points}
+    \label{1-trilinear-compositing}
+  \end{subfigure}
+  \begin{subfigure}{.33\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{shots/clusters-kmeanspp-3}
+    \caption{Kmeans++ with k = 3}
+    \label{1-trilinear-compositing}
+  \end{subfigure}
+  \begin{subfigure}{.33\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{shots/clusters-kmeanspp-4}
+    \caption{Kmeans++ with k = 4}
+    \label{1-trilinear-compositing}
+  \end{subfigure}
+  \begin{subfigure}{.33\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{shots/clusters-kmeanspp-5}
+    \caption{Kmeans++ with k = 5}
+    \label{1-trilinear-compositing}
+  \end{subfigure}
+  \begin{subfigure}{.33\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{shots/clusters-gonz-3}
+    \caption{Kmeans using Gonzales algorithm to choose the seeds, k = 3}
+    \label{1-trilinear-compositing}
+  \end{subfigure}
+  \begin{subfigure}{.33\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{shots/clusters-gonz-4}
+    \caption{Kmeans using Gonzales algorithm to choose the seeds, k = 4}
+    \label{1-trilinear-compositing}
+  \end{subfigure}
+  \begin{subfigure}{.33\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{shots/clusters-gonz-5}
+    \caption{Kmeans using Gonzales algorithm to choose the seeds, k = 5}
+    \label{1-trilinear-compositing}
+  \end{subfigure}
+  \caption{K-means results with different settings}
+  \label{clustering_result}
+\end{figure}
