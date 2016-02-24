@@ -1,20 +1,13 @@
 \section*{Exercise 4}
-In this exercise, we prove the triangle inequality property of Jaccard distance by using the minhash property. That is, the Jaccard distance equals the probability that two sets do not minhash to the same value. 
+\subsection*{a}
+In this exercise, we consider another variant of the clustering problem, the
+k-median problem. The idea is similar to k-means in the sense that the distance
+from each point to its center is minimized.
 
-Let's $A,B,C$ be our 3 sets. After constructing the signature matrix, it is inferred from the lecture that:
+The k-median approach can be more robust against noise because noise does not 
+affect the order of the data, so the medians are not modified if the noise 
+increases. If we use k-means, noise can biase the centroids. 
 
-$$d_j(A,B) = P(minhash(A) \neq minhash(B)) = \frac{|minhash(A) \neq minhash(B)|}{|All Permutations|}$$
-$$d_j(A,C) = P(minhash(A) \neq minhash(C)) = \frac{|minhash(A) \neq minhash(C)|}{|All Permutations|}$$
-$$d_j(C,B) = P(minhash(C) \neq minhash(B)) = \frac{|minhash(C) \neq minhash(B)|}{|All Permutations|}$$
-
-It is obvious that $minhash(C)$ can be $minhash(A)$, $minhash(B)$, or another value. Then, when $minhash(A) \neq minhash(B)$, either $minhash(C) \neq minhash(A)$, or $minhash(C) \neq minhash(B)$, or $minhash(C) \neq minhash(A) \neq minhash(B)$ is true.
-
-Thus, $|minhash(A) \neq minhash(B)| \leq |minhash(A) \neq minhash(C)| + |minhash(C) \neq minhash(B)|$, which gives:
-
-$$\frac{|minhash(A) \neq minhash(B)|}{|All Permutations|} \leq \frac{|minhash(A) \neq minhash(C)|}{|All Permutations|} + \frac{|minhash(C) \neq minhash(B)|}{|All Permutations|}  $$
-
-This is equivalent to:
-
-$$P(minhash(A) \neq minhash(B)) \leq P(minhash(A) \neq minhash(C)) + P(minhash(C) \neq minhash(B))$$
-
-Which completes the proof.
+\subsection*{b}
+We use a similar algorithm to k-means, just replace the means by the medians. Thatis, when updating a cluster, we take the point having the medians of the features as coordinates as the new center. This approach is obviously not optimal in term of cost-minimization, as the solution is proven in Exercise 2. So we will 
+experiment the actual cost we get in the set C3.txt.

@@ -1,7 +1,32 @@
 \section*{Exercise 2}
-In this excercise, we are proving that if the Jaccard similarity of two sets is 0, then minhashing always gives a correct estimate of the Jaccard similarity.
+In this excercise, we are proving that barycenter computed in the update step minimizes the cost function.
 
-If the Jaccard similarity of two sets is 0, then the intersection of the two set is empty. This means there are no rows which the elements are both ``1'' in the 
-characteristic matrix. Hence, when performing minhashing, there cannot be any row with the same values in 2 cells. Thus $P(h(S_i) = h(S_j)) = 0$, which is the same as the Jaccard similarity. 
+Let's first assume that $d = 1$. Then the cost function is 
 
+$$\phi(U,b) = \Sigma_{p_i \in U} ||p_i - b||^2$$
 
+The function is minimized when its derivative is 0. In this case, we are considering the changes of the function with respect to the way
+we choose the center. Thus, we can take the partial derivative with respect to b.
+
+\begin{align*}
+  \frac{d}{d_b} \Sigma_{p_i \in U} ||p_i - b||^2 &= \Sigma_{p_i \in U} \frac{d}{d_b} ||p_i - b||^2 \\
+  &= \Sigma_{p_i \in U} 2 \cdot ||p_i - b|| \cdot \frac{||p_i - b||}{p_i - b} \cdot (-1) \\
+  &= 2 \Sigma_{p_i \in U} (b - p_i) \\
+\end{align*}
+
+The cost function is minimized when 
+
+\begin{align*}
+  2 \Sigma_{p_i \in U} (b - p_i) &= 0 \\
+  \Sigma_{p_i \in U} b &= \Sigma_{p_i \in U} p_i \\
+  b &= \frac{1}{n} \Sigma_{p_i in U} p_i \\
+\end{align*}
+
+where $n = |U|$.
+
+The update step also assigns each point to the nearest center, which itself minimizes the total cost because the cost of each point is minimized.
+
+When $d > 1$, the update step in each cluster is independent from the other clusters. Thus, the sum of the costs of each clusters is also minimized when each individual 
+cost is minimized.
+
+Therefore, the update step actually minimizes the cost function.
