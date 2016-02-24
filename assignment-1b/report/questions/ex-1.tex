@@ -1,13 +1,13 @@
 \section*{Exercise 1}
-In this assignment, we implement the k-means algorithm for clustering the input data points. The whole source code of the project can be found in the Github repository \url{https://github.com/MazenAly/datamining}.
-
-Clustering is considered as an unsupervised machine learning technique, that means there are no labels in the data that we need to predict, but it helps us getting some insights about the input data.
+In this assignment, we implement the k-means algorithm for clustering the input data points.
+Clustering is considered as a unsupervised machine learning problem, that means there no labels in the data that we need to predict as classification, but it helps us getting some insights about the input data.
 
 We developed four methods for initializing the first K cluster centroids (where K is an input)
-The first method is just choosing the first K data points to be the centroids, the second one is randomized selections of the initial centroids, the third one is k-means++,
+The first one is just choosing the first K data points to be the centroids, the second method is randomized selections of the initial centroids. the third method is k-means++
 and the fourth method is using Gonzales’ algorithm.
 
-For each method, we run k-means for different values, $k \in {3,4,5}$, and in randomized methods, we experiment that 5 times. We visualize the results to get more understanding and learning experience as shown below. In figure \ref{clustering_result}, we shows the k-means clustering result on the dataset C2.txt with various initialization strategies and different values of $k$.
+For each method, we run k-means for different values of k {3,4,5} and in randomized methods, we run that 5 times. we visualise the results to get more understanding and learning experience as shown below.
+
 
 \begin{figure}[!htb]
 \centering
@@ -20,34 +20,36 @@ The top digram of figure \ref{std_mean} shows the average cost of 5 runs of each
 
 The bottom figure shows standard deviation of the costs across all the 5 runs. and we can see the random initialization can have higher standard deviation which means that one or more of the runs can be highly deviated from average of the runs.
 
+
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.9\textwidth]{shots/firstk5clusters.png}
-\caption{ }
+\caption{Convergent rate of k-means using the first 5 points as initial centroids. }
 \label{firstk5clusters}
 \end{figure}
 
-Figure \ref{firstk5clusters} shows the convergent rate of k-means algorithm using the first 5 points as the initial centroids, we can see that of course it will be same if run this several times as no randomization exists.
+
+Figure \ref{firstk5clusters} shows the convergence rate of k-means algorithm using the first 5 points as the initial centroids, we can see that of course it will be same if run this several times as no randomization exists.
 
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.9\textwidth]{shots/gonzales3clusters.png}
-\caption{ }
+\caption{Convergence rate of k-means using initialization of Gonzales' algorithm and 3 clusters for 5 different runs }
 \label{gonzales3clusters}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.9\textwidth]{shots/gonzales4clusters.png}
-\caption{ }
+\caption{Convergence rate of k-means using initialization of Gonzales' algorithm and 4 clusters for 5 different runs  }
 \label{gonzales4clusters}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.9\textwidth]{shots/gonzales5clusters.png}
-\caption{ }
+\caption{ Convergence rate of k-means using initialization of Gonzales' algorithm and 5 clusters for 5 different runs }
 \label{gonzales5clusters}
 \end{figure}
 
@@ -58,7 +60,7 @@ But for 5 clusters Gonzales' algorithm convergent rate was diverse between 1 and
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.9\textwidth]{shots/random3clusters.png}
-\caption{ random5clusters}
+\caption{ Convergence rate of k-means using random initialization and 3 clusters for 5 different runs }
 \label{random3clusters}
 \end{figure}
 
@@ -67,7 +69,7 @@ But for 5 clusters Gonzales' algorithm convergent rate was diverse between 1 and
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.9\textwidth]{shots/random4clusters.png}
-\caption{ random5clusters}
+\caption{ Convergence rate of k-means using random initialization and 4 clusters for 5 different runs }
 \label{random4clusters}
 \end{figure}
 
@@ -76,7 +78,7 @@ But for 5 clusters Gonzales' algorithm convergent rate was diverse between 1 and
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.9\textwidth]{shots/random5clusters.png}
-\caption{ random5clusters}
+\caption{ Convergence rate of k-means using random initialization and 5 clusters for 5 different runs  }
 \label{random5clusters}
 \end{figure}
 
@@ -86,7 +88,7 @@ Doing the same for the random method we can see in figures \ref{random3clusters}
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.9\textwidth]{shots/kmeans++3clusters.png}
-\caption{kmeans++3clusters }
+\caption{ Convergence rate of k-means using kmeans++ initialization and 3 clusters for 5 different runs   }
 \label{kmeans++3clusters}
 \end{figure}
 
@@ -95,7 +97,7 @@ Doing the same for the random method we can see in figures \ref{random3clusters}
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.9\textwidth]{shots/kmeans++4clusters.png}
-\caption{kmeans++3clusters }
+\caption{Convergence rate of k-means using kmeans++ initialization and 4 clusters for 5 different runs  }
 \label{kmeans++4clusters}
 \end{figure}
 
@@ -103,87 +105,24 @@ Doing the same for the random method we can see in figures \ref{random3clusters}
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.9\textwidth]{shots/kmeans++5clusters.png}
-\caption{ kmeans++3clusters}
+\caption{ Convergence rate of k-means using kmeans++ initialization and 5 clusters for 5 different runs }
 \label{kmeans++5clusters}
 \end{figure}
   
 
 For kmeans++ we ran the algorithm 5 times for each different clusters number to visualize the convergence rate as in figures \ref{kmeans++3clusters} , \ref{kmeans++4clusters} and \ref{kmeans++5clusters}. We can that the rates are also diverse across diffrent runs but on average k-means converge in less number of steps due to the intelligence of kmeans++ and choosing the initial centroids. 
 
-\begin{figure}
-% hspace*{-0.2\textwidth}
-  \begin{subfigure}{.33\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{shots/clusters-firstk-3}
-    \caption{Kmeans by picking first 3 points}
-    \label{1-trilinear-compositing}
-  \end{subfigure}
-  \begin{subfigure}{.33\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{shots/clusters-firstk-4}
-    \caption{Kmeans by picking first 4 points}
-    \label{1-trilinear-compositing}
-  \end{subfigure}
-  \begin{subfigure}{.33\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{shots/clusters-firstk-5}
-    \caption{Kmeans by picking first 5 points}
-    \label{1-trilinear-compositing}
-  \end{subfigure}
-  \begin{subfigure}{.33\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{shots/clusters-random-3}
-    \caption{Kmeans by picking first 3 random points}
-    \label{1-trilinear-compositing}
-  \end{subfigure}
-  \begin{subfigure}{.33\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{shots/clusters-random-4}
-    \caption{Kmeans by picking first 4 random points}
-    \label{1-trilinear-compositing}
-  \end{subfigure}
-  \begin{subfigure}{.33\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{shots/clusters-random-5}
-    \caption{Kmeans by picking first 5 random points}
-    \label{1-trilinear-compositing}
-  \end{subfigure}
-  \begin{subfigure}{.33\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{shots/clusters-kmeanspp-3}
-    \caption{Kmeans++ with k = 3}
-    \label{1-trilinear-compositing}
-  \end{subfigure}
-  \begin{subfigure}{.33\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{shots/clusters-kmeanspp-4}
-    \caption{Kmeans++ with k = 4}
-    \label{1-trilinear-compositing}
-  \end{subfigure}
-  \begin{subfigure}{.33\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{shots/clusters-kmeanspp-5}
-    \caption{Kmeans++ with k = 5}
-    \label{1-trilinear-compositing}
-  \end{subfigure}
-  \begin{subfigure}{.33\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{shots/clusters-gonz-3}
-    \caption{Kmeans using Gonzales algorithm to choose the seeds, k = 3}
-    \label{1-trilinear-compositing}
-  \end{subfigure}
-  \begin{subfigure}{.33\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{shots/clusters-gonz-4}
-    \caption{Kmeans using Gonzales algorithm to choose the seeds, k = 4}
-    \label{1-trilinear-compositing}
-  \end{subfigure}
-  \begin{subfigure}{.33\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{shots/clusters-gonz-5}
-    \caption{Kmeans using Gonzales algorithm to choose the seeds, k = 5}
-    \label{1-trilinear-compositing}
-  \end{subfigure}
-  \caption{K-means results with different settings}
-  \label{clustering_result}
-\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
