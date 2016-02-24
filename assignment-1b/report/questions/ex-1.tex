@@ -1,12 +1,13 @@
 \section*{Exercise 1}
-In this assignment, we implement the k-means algorithm for clustering the input data points.
-Clustering is considered as a unsupervised machine learning problem, that means there no labels in the data that we need to predict as classification, but it helps us getting some insights about the input data.
+In this assignment, we implement the k-means algorithm for clustering the input data points. The whole source code of the project can be found in the Github repository \url{https://github.com/MazenAly/datamining}.
+
+Clustering is considered as an unsupervised machine learning technique, that means there are no labels in the data that we need to predict, but it helps us getting some insights about the input data.
 
 We developed four methods for initializing the first K cluster centroids (where K is an input)
-The first one is just choosing the first K data points to be the centroids, the second method is randomized selections of the initial centroids. the third method is k-means++
+The first method is just choosing the first K data points to be the centroids, the second one is randomized selections of the initial centroids, the third one is k-means++,
 and the fourth method is using Gonzales’ algorithm.
 
-For each method, we run k-means for different values of k {3,4,5} and in randomized methods, we run that 5 times. we visualise the results to get more understanding and learning experience as shown below. In figure \ref{clustering_result}, we shows the k-means clustering result on the dataset C2.txt with various initialization strategies and different values of $k$.
+For each method, we run k-means for different values, $k \in {3,4,5}$, and in randomized methods, we experiment that 5 times. We visualize the results to get more understanding and learning experience as shown below. In figure \ref{clustering_result}, we shows the k-means clustering result on the dataset C2.txt with various initialization strategies and different values of $k$.
 
 \begin{figure}[!htb]
 \centering
