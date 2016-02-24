@@ -9,5 +9,8 @@ affect the order of the data, so the medians are not modified if the noise
 increases. If we use k-means, noise can biase the centroids. 
 
 \subsection*{b}
-We use a similar algorithm to k-means, just replace the means by the medians. Thatis, when updating a cluster, we take the point having the medians of the features as coordinates as the new center. This approach is obviously not optimal in term of cost-minimization, as the solution is proven in Exercise 2. So we will 
-experiment the actual cost we get in the set C3.txt.
+We use a similar algorithm to k-means, just replace the means by the medians. That is, when updating a cluster, we take the point having the medians of the features as coordinates as the new center. Also, when comparing the clusters, the median points are used instead of the centroids. The median of a cluster is computed by taking the medians of the dimensions and using them as the coordinates. This approach is obviously not optimal in term of cost-minimization, as the solution is proven in Exercise 2. So we will experiment the actual cost we get in the set C3.txt.
+
+We experiment our approach with Euclidean Distance and Manhattan Distance. The code is in our Github repo, which was mentioned in Exercise 1.
+
+We run the k-median clustering 5 times on the dataset C3.txt for each of the metrics, and use the probabilistic approach similar to k-means++ to initialize the algorithm. For Euclidean Distance, we achieve the average cost of 5219.84203478, the standard deviation of 809.135940197, and the smallest cost of 4812.71023179. For Manhattan Distance, we achieve the average cost of 8569.62584451, the standard deviation of 24.8998452121, and the smallest cost of 8519.87957668.

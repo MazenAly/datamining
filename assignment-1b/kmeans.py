@@ -169,6 +169,6 @@ def run_analysis():
     
 if __name__ == "__main__":
     c1 = load_data_1b("./data1b/C2.txt")
-    run_analysis()
-    #result = kmeans(c1, int(sys.argv[1]), sys.argv[2])
-    #scatterplot(result)
+    #run_analysis()
+    result = kmeans(c1, int(sys.argv[1]), sys.argv[2])
+    scatterplot(result)
