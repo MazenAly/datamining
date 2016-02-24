@@ -1,34 +1,13 @@
 \section*{Exercise 3}
-In this exercise, we show an example that the cyclic permutations are not enough to estimate the Jaccard similarity correctly.
+In this exercise, we show an example that the cosine distance does not follow the triangle inequality.
 
-Let's take a look at the example in table \ref{example}. We will perform a cyclic permutation to estimate the Jaccard similarity.
+Let $p,q$ be 2 vectors where the angle $\alpha$ between them is $\frac{\pi}{2}$, and $r$ be the bisector of that angle. Thus, the angle $\beta$ between $p$ and $r$ and
+the angle $\gamma$ between $r$ and $q$ are both $\frac{\pi}{4}$. We have:
 
-\begin{table}[h]
-  \centering
-\caption{Example}
-\label{example}
-\begin{tabular}{@{}lll@{}}
-  \toprule
-  & S1 & S2 \\ \midrule
-a & 1  & 0  \\
-b & 1  & 1  \\
-c & 0  & 0  \\
-d & 0  & 1  \\
-e & 1  & 1  \\ \bottomrule
-\end{tabular}
-\end{table}
+\begin{align*}
+  dist(p,q) &= 1 - cosine(\alpha) = 1 \\
+  dist(p,r) + dist(r,q) &= 1 - cosine(\beta) + 1 - cosine(\gamma) \\
+  &= 2 \sqrt(2) / 2 > 1
+\end{align*}
 
-In this example, we can see that the 2 sets have 2 common words, ``b'' and ``e''. In general, $S1 \cap S2 = \{b,e\}$ and $S1 \cup S2 = \{a,b,d,e\}$. Thus the (correct) Jaccard similarity is $|S1 \cap S2| / |S1 \cup S2| = 1/2$.
-
-Now we perform the cyclic permutation. 
-
-\begin{itemize}
-    \item a-b-c-d-e: The signature is 1 - 2.
-    \item b-c-d-e-a: The signature is 1 - 1.
-    \item c-d-e-a-b: The signature is 3 - 2.
-    \item d-e-a-b-c: The signature is 2 - 1.
-    \item e-a-b-c-d: The signature is 1 - 1.
-\end{itemize}
-
-We have 2 rows which contain the same values on 2 cells, and 5 rows in total. So the estimated Jaccard similarity is $2/5$, which is not correct. The reason is the $0 - 0$ row, which makes the next rows to be counted twice in the intersection (while every row is counted only once in the total number of permutations).
-
+This completes the example.
