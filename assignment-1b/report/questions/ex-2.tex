@@ -1,0 +1,7 @@
+\section*{Exercise 2}
+In this excercise, we are proving that if the Jaccard similarity of two sets is 0, then minhashing always gives a correct estimate of the Jaccard similarity.
+
+If the Jaccard similarity of two sets is 0, then the intersection of the two set is empty. This means there are no rows which the elements are both ``1'' in the 
+characteristic matrix. Hence, when performing minhashing, there cannot be any row with the same values in 2 cells. Thus $P(h(S_i) = h(S_j)) = 0$, which is the same as the Jaccard similarity. 
+
+

@@ -27,7 +27,8 @@ def gonzales(data , k):
     distance_column_index = points_list.columns.get_loc("distance")
     #choosing a random point as the first center
 
-    center0 =     points_list.sample(n=1 , random_state = randint(0,100) , axis=0)
+    #center0 =     points_list.sample(n=1 , random_state = randint(0,100) , axis=0)
+    center0 =     points_list.head(1)
     centers_list = DataFrame(center0.drop(['distance' , 'center'] , axis = 1))
     centers_list['color'] = 'r'
     colors = "bgcmykw"
@@ -44,14 +45,14 @@ def gonzales(data , k):
         for indexp, p in points_list.iterrows():
             #variables to save the choose the closest center
             min_cluster_distance = math.inf
-            clostest_cluster = None
+            closest_cluster = None
             for indexc, center in centers_list.iterrows():
                 dis = spatial.distance.euclidean(center.as_matrix(columns=[0 ,1]) , p.as_matrix(columns=[0 ,1]))
                 if dis < min_cluster_distance:
                     min_cluster_distance = dis
-                    clostest_cluster = indexc
+                    closest_cluster = indexc
             p["distance"] = min_cluster_distance
-            p["center"] = clostest_cluster               
+            p["center"] = closest_cluster               
             if min_cluster_distance > max_distance:
                 max_distance = min_cluster_distance
                 next_cluster = indexp 
