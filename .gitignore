@@ -1,9 +1,10 @@
 .project
 .pydevproject
 *.swp
-report/*.aux
+*.aux
 report/main.log
 report/main.out
 report/main.toc
 *.log
 assignment-1b/__pycache__/*
+*.fuse_hidden0000032c00000002
