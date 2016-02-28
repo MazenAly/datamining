@@ -1,6 +1,7 @@
 # Source: http://neuralnetworksanddeeplearning.com/chap1.html
 # You need only train and test sets. Simply disregard the validation set.
 import numpy as np
+from math import sqrt
 try:
    import cPickle as pickle
 except:
@@ -14,7 +15,7 @@ from scipy import spatial
 import time 
 import math
 import sys
-
+import matplotlib.pyplot as plt
 
 # function that takes two vectors and return the dot product value of it by summing the multiplication of each two elements 
 #def dot_product(v1, v2):
@@ -33,8 +34,24 @@ def load_data():
     f.close()
     return training_data, validation_data, test_data
 
-def create_matrix(d, k):
-        
+def create_matrix(d, k): 
+    
+    mtx_val = 1/sqrt(d)
+    prob = 0
+    
+    mtx = np.zeros((d, k))
+    for i in range(0,d):
+        for j in range(0,k):
+            random_number = np.random.random_sample()
+            if random_number <= 0.5:
+                mtx[i,j] = mtx_val
+            else:
+                mtx[i,j] = -mtx_val
+            
+    return mtx
+    #------------------------------------------ for i in range(len(data_clone)):
+    #------------------ prob = prob + np.divide(distances[i], np.sum(distances))
+    #------------------------------------------------- if random_number <= prob:
 
 def vectorized_result(j):
     e = np.zeros((10, 1))
@@ -53,10 +70,60 @@ def load_data_wrapper():
     return training_data, validation_data, test_data
 
 
+print("start")
 training_data, validation_data, test_data  = load_data_wrapper()
+print("s")
 training_data, validation_data, test_data = list(training_data), list(validation_data), list(test_data) # for transforming the zip objects to lists
+print("s")
+
 training_data = [[entry[0].flatten(), entry[1]] for entry in training_data]
+print("s")
+
 test_data = [[entry[0].flatten(), entry[1]] for entry in test_data]
+
+training_data = np.matrix([training_data[i][0] for i in range(len(training_data))])
+test_data = np.matrix([test_data[i][0] for i in range(len(test_data))]) 
+
+print('training data', training_data.shape)
+print('test data', test_data.shape)
+
+k_values = [50 , 100 , 500]
+
+for k_value in k_values:
+    mtx = np.matrix(create_matrix(784, k_value))
+    training_data_projected = training_data * mtx
+    test_data_projected = test_data * mtx  
+    
+    print('training data proj', training_data_projected.shape)
+    print('test data proj', test_data_projected.shape)
+    
+    distored_values_list = []
+    for i in range(20):
+        for j in range(i+1, 20):
+            dis_orig = spatial.distance.euclidean(training_data[i,:] , training_data[j,:])
+            dis_projected = spatial.distance.euclidean(training_data_projected[i,:] , training_data_projected[j,:])
+            distored_values_list.append(dis_orig /dis_projected )
+    
+    #--------------------------- for i , val in enumerate(distored_values_list):
+        #---------------------------------------------------- plt.scatter(i,val)
+        #--------------------------------------------------- plt.xlabel("pairs")
+        #--------------------------------------- plt.ylabel("Distortion value ")
+    #------------------------------------------------------------------ plt.show
+    
+    print(len(distored_values_list))
+    plt.hist(distored_values_list)
+    axes = plt.gca()
+    #axes.set_xlim([xmin,xmax])
+    axes.set_ylim([0,70])
+    plt.title("Distortion Histogram for k = " + str(k_value))
+    plt.xlabel("Distortion value for k = " + str(k_value))
+    plt.ylabel("Frequency")
+    plt.show()
+
+
+
+#print(test_data)
+
 
 #module for digits classification using nearest neighbor classifier
 def NNClassifier():
@@ -148,10 +215,10 @@ def nn_scikit_learn():
     end_time = time.time()
     print("elapsed time: " , end_time - start_time)
 
-if len(sys.argv) > 1:
-    nn_scikit_learn()
-else:
-    NNClassifier()   
+#--------------------------------------------------------- if len(sys.argv) > 1:
+    #--------------------------------------------------------- nn_scikit_learn()
+#------------------------------------------------------------------------- else:
+    #------------------------------------------------------------ NNClassifier()
 
 #confusion_matrix = build_matrix()
 #print_analytics(confusion_matrix)
