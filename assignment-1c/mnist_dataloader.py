@@ -102,7 +102,7 @@ for k_value in k_values:
         for j in range(i+1, 20):
             dis_orig = spatial.distance.euclidean(training_data[i,:] , training_data[j,:])
             dis_projected = spatial.distance.euclidean(training_data_projected[i,:] , training_data_projected[j,:])
-            distored_values_list.append(dis_orig /dis_projected )
+            distored_values_list.append(dis_projected  /dis_orig )
     
     #--------------------------- for i , val in enumerate(distored_values_list):
         #---------------------------------------------------- plt.scatter(i,val)
