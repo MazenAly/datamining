@@ -28,6 +28,12 @@ def cosine_similarity(v1, v2):
     len2 = np.sqrt(np.dot(v2, v2))
     return np.divide(prod , np.multiply(len1 , len2))
 
+
+def euclidean_distance(v1, v2):
+    diff = np.subtract(v1, v2)
+    return np.linalg.norm(diff)
+
+
 def load_data():
     f = gzip.open('./data1a/mnist.pkl.gz', 'rb')
     training_data, validation_data, test_data = pickle.load(f , encoding='latin1' )  #added encoding for Python 3
@@ -128,7 +134,7 @@ k_values = [50 , 100 , 500]
 
 
 #module for digits classification using nearest neighbor classifier
-def NNClassifier():
+def NNClassifier(training_data , test_data ):
     #opening two files for writing the predications and the true labels.
     f_predicted = open('predicted.txt', 'w')
     f_label = open('label.txt', 'w')
@@ -144,7 +150,8 @@ def NNClassifier():
             training_entry_features = training_entry[0]
             #measuring the cosine similarity using scipy library
             #sim = 1 - spatial.distance.cosine(training_entry_features, test_features)
-            sim = cosine_similarity(training_entry_features, test_features)
+            #sim = cosine_similarity(training_entry_features, test_features)
+            sim = 1 - euclidean_distance(training_entry_features, test_features)
             if sim > max_sim: # if this entry has the max similarity so far then safe this entry as nearest neighbor
                 max_sim = sim 
                 nearest_neighbor = training_entry
