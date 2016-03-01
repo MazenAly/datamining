@@ -72,53 +72,55 @@ def load_data_wrapper():
 
 print("start")
 training_data, validation_data, test_data  = load_data_wrapper()
-print("s")
 training_data, validation_data, test_data = list(training_data), list(validation_data), list(test_data) # for transforming the zip objects to lists
-print("s")
 
 training_data = [[entry[0].flatten(), entry[1]] for entry in training_data]
-print("s")
-
 test_data = [[entry[0].flatten(), entry[1]] for entry in test_data]
 
-training_data = np.matrix([training_data[i][0] for i in range(len(training_data))])
-test_data = np.matrix([test_data[i][0] for i in range(len(test_data))]) 
+print('training data', len(training_data[0][1]))
 
-print('training data', training_data.shape)
-print('test data', test_data.shape)
+training_data_content = np.matrix([training_data[i][0] for i in range(len(training_data))])
+test_data_content = np.matrix([test_data[i][0] for i in range(len(test_data))]) 
+
+k = int(sys.argv[1])
+mtx = np.matrix(create_matrix(784, k))
+        
+
+training_data_content = training_data_content * mtx
+test_data_content = test_data_content * mtx  
 
 k_values = [50 , 100 , 500]
 
-for k_value in k_values:
-    mtx = np.matrix(create_matrix(784, k_value))
-    training_data_projected = training_data * mtx
-    test_data_projected = test_data * mtx  
-    
-    print('training data proj', training_data_projected.shape)
-    print('test data proj', test_data_projected.shape)
-    
-    distored_values_list = []
-    for i in range(20):
-        for j in range(i+1, 20):
-            dis_orig = spatial.distance.euclidean(training_data[i,:] , training_data[j,:])
-            dis_projected = spatial.distance.euclidean(training_data_projected[i,:] , training_data_projected[j,:])
-            distored_values_list.append(dis_projected  /dis_orig )
-    
-    #--------------------------- for i , val in enumerate(distored_values_list):
-        #---------------------------------------------------- plt.scatter(i,val)
-        #--------------------------------------------------- plt.xlabel("pairs")
-        #--------------------------------------- plt.ylabel("Distortion value ")
-    #------------------------------------------------------------------ plt.show
-    
-    print(len(distored_values_list))
-    plt.hist(distored_values_list)
-    axes = plt.gca()
-    #axes.set_xlim([xmin,xmax])
-    axes.set_ylim([0,70])
-    plt.title("Distortion Histogram for k = " + str(k_value))
-    plt.xlabel("Distortion value for k = " + str(k_value))
-    plt.ylabel("Frequency")
-    plt.show()
+#for k_value in k_values:
+#    mtx = np.matrix(create_matrix(784, k_value))
+#    training_data_projected = training_data * mtx
+#    test_data_projected = test_data * mtx  
+#    
+#    print('training data proj', training_data_projected.shape)
+#    print('test data proj', test_data_projected.shape)
+#    
+#    distored_values_list = []
+#    for i in range(20):
+#        for j in range(i+1, 20):
+#            dis_orig = spatial.distance.euclidean(training_data[i,:] , training_data[j,:])
+#            dis_projected = spatial.distance.euclidean(training_data_projected[i,:] , training_data_projected[j,:])
+#            distored_values_list.append(dis_projected  /dis_orig )
+#    
+#    #--------------------------- for i , val in enumerate(distored_values_list):
+#        #---------------------------------------------------- plt.scatter(i,val)
+#        #--------------------------------------------------- plt.xlabel("pairs")
+#        #--------------------------------------- plt.ylabel("Distortion value ")
+#    #------------------------------------------------------------------ plt.show
+#    
+#    print(len(distored_values_list))
+#    plt.hist(distored_values_list)
+#    axes = plt.gca()
+#    #axes.set_xlim([xmin,xmax])
+#    axes.set_ylim([0,70])
+#    plt.title("Distortion Histogram for k = " + str(k_value))
+#    plt.xlabel("Distortion value for k = " + str(k_value))
+#    plt.ylabel("Frequency")
+#    plt.show()
 
 
 
