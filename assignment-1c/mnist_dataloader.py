@@ -42,7 +42,7 @@ def load_data():
 
 def create_matrix(d, k): 
     
-    mtx_val = 1/sqrt(d)
+    mtx_val = 1/np.sqrt(d)
     prob = 0
     
     mtx = np.zeros((d, k))
@@ -89,11 +89,16 @@ training_data_content = np.matrix([training_data[i][0] for i in range(len(traini
 test_data_content = np.matrix([test_data[i][0] for i in range(len(test_data))]) 
 
 k = int(sys.argv[1])
-mtx = np.matrix(create_matrix(784, k))
+d = len(training_data[0][0])
+mtx = np.matrix(create_matrix(d, k))
         
-
 training_data_content = training_data_content * mtx
 test_data_content = test_data_content * mtx  
+training_data_content = np.multiply(training_data_content, np.sqrt(np.divide(d, k)))
+test_data_content = np.multiply(test_data_content, np.sqrt(np.divide(d, k)))
+
+training_data_content = [np.array(training_data_content[i]).flatten() for i in range(len(training_data_content))]
+test_data_content = [np.array(test_data_content[i]).flatten() for i in range(len(test_data_content))]
 
 k_values = [50 , 100 , 500]
 
@@ -134,26 +139,32 @@ k_values = [50 , 100 , 500]
 
 
 #module for digits classification using nearest neighbor classifier
-def NNClassifier(training_data , test_data ):
+def NNClassifier():
     #opening two files for writing the predications and the true labels.
-    f_predicted = open('predicted.txt', 'w')
-    f_label = open('label.txt', 'w')
+    f_predicted = open('predicted_' + str(k) + '.txt', 'w')
+    f_label = open('label_' + str(k) + '.txt', 'w')
     #for each test entry, we will loop on every training entry and check if 'ts the closest neighbor so far or not.
-    for test_entry in test_data:
+    for i in range(1000):
+        test_entry = test_data[i]
         start_time = time.time()
-        test_features = test_entry[0]    
+        #test_features = test_entry[0]    
+        test_features = test_data_content[i]
         test_label = test_entry[1]
         # defining variables to save the closest neighbor
-        max_sim = 0  
+        min_dis = math.inf
         nearest_neighbor = 0 
-        for training_entry in training_data:
-            training_entry_features = training_entry[0]
+        for j in range(len(training_data)):
+            training_entry = training_data[j]
+            #training_entry_features = training_entry[0]
+            training_entry_features = training_data_content[j]
             #measuring the cosine similarity using scipy library
             #sim = 1 - spatial.distance.cosine(training_entry_features, test_features)
             #sim = cosine_similarity(training_entry_features, test_features)
-            sim = 1 - euclidean_distance(training_entry_features, test_features)
-            if sim > max_sim: # if this entry has the max similarity so far then safe this entry as nearest neighbor
-                max_sim = sim 
+            distance = euclidean_distance(training_entry_features, test_features)
+            #distance = np.sum(np.power(np.subtract(training_entry_features, test_features), 2))
+   
+            if distance < min_dis: # if this entry has the max similarity so far then safe this entry as nearest neighbor
+                min_dis = distance 
                 nearest_neighbor = training_entry
         # to know the predicated label we get the index of the 1 value, as the label of the training data are an array of 10 values, zeros for all and 1 for the label      
         predicated_label = list(nearest_neighbor[1]).index(1)
@@ -179,9 +190,9 @@ mtx = np.zeros((11, 11))
 #printing options of numpy
 np.set_printoptions(suppress=True) 
 #function to build the confusion matrix, rows are the predicted labels and columns are true labels
-def build_matrix():
-    f_predicted = open('predicted.txt', 'r')
-    f_label = open('label.txt', 'r')
+def build_confusion_matrix():
+    f_predicted = open('predicted_' + str(k) + '.txt', 'r')
+    f_label = open('label_' + str(k) + '.txt', 'r')
     for predicted_label in f_predicted:
         true_label = f_label.readline()
         mtx[int(predicted_label)][int(true_label)] += 1
@@ -198,7 +209,7 @@ def build_matrix():
 # function that takes the confusion matrix as input and measure the accuracy of the classifier, as well as the precision and recall for each class  
 def print_analytics(mtx):  
     # the accuracy is measured by dividing the number of correct predictions by the total number of predictions
-    print("Accuracy of the NN classifier is : " , sum(mtx.diagonal()[:10]) * 100/len(test_data) , "%"  ) 
+    print("Accuracy of the NN classifier is : " , sum(mtx.diagonal()[:10]) * 100/1000, "%"  ) 
     for label in range(0,10): # for each label we measure the precision and recall
         print("Class " , label , ":")
         # the precision is measured by dividing the true positives by the summation of true positives and false positives of this class
@@ -227,8 +238,8 @@ def nn_scikit_learn():
 #--------------------------------------------------------- if len(sys.argv) > 1:
     #--------------------------------------------------------- nn_scikit_learn()
 #------------------------------------------------------------------------- else:
-    #------------------------------------------------------------ NNClassifier()
+NNClassifier()
 
-#confusion_matrix = build_matrix()
+#confusion_matrix = build_confusion_matrix()
 #print_analytics(confusion_matrix)
 
