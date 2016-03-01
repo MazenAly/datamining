@@ -1,0 +1,13 @@
+\section*{Exercise 2}
+Since the nearest neighbor in $F$ of a point $P$ in $R^d$ is the projection of $P$ onto $F$, a linear mapping that maps a point to its nearest neighbor in a subspace can
+be simulated by a rotation followed by an orthogonal projection.
+
+Let $P_1$ and $P_2$ be 2 points in $R^d$, $M$ be the rotation matrix, and $P$ be the projection matrix. 
+
+Let $Q_1 = M \cdot P_1$, $Q_2 = M \cdot P_2$, $P'_1 = P \cdot Q_1$, and $P'_2 = P \cdot Q_2$. So $P'_1$ and $P'_2$ are the resulting points.
+
+We know that Rotation preserves the Euclidean distance, so $Q_1 Q_2 = P_1 P_2$.
+
+Because $P$ contains only 0 and 1, multiplying $P$ to $Q_1$ and $Q_2$ preserves several features of $Q_1$ and $Q_2$, and set everything else to 0. Thus, $(P'_1 - P'_2) \leq (Q_1 - Q_2)$, which gives $(P'_1 - P'_2 \leq (P_1 - P_2)$.
+
+This completes the proof.
