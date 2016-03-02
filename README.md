@@ -37,7 +37,7 @@ python kmedians.py <number of cluster> method distance_metric
 ```
 where method can be ```firstk```, ```random```, ```kmeans++```, ```gonz```, and distance_metric can be ```eu``` or ```mat```.
 
-#Assignment 1b
+#Assignment 1c
 ## About the project
 This code is the python3 implementation of a nearest neighbor classifier for hand-written digit recognition, using Random Projections as the Dimensionality Reduction mean. 
 
