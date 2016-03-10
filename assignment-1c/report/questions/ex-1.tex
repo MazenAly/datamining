@@ -1,7 +1,9 @@
 \section*{Exercise 1}
-In this assignment, we implement the Random Projection Algorithm for reducing the number of dimensions in the MNIST dataset. 
-The idea of random projections is simply if we have points in a vector space that are of sufficiently high dimension, then these points can be projected into a suitable lower-dimensional space in a way which approximately preserves the distances between the points.
-we achieved this by randomly generate a k × d matrix with the assignment stated coefficients.
+In this assignment, we implement the Random Projection Algorithm for reducing the number of dimensions in the MNIST dataset. The whole source code of the project can be found in the Github repository \url{https://github.com/MazenAly/datamining}.
+
+The idea of random projections is simply if we have points in a vector space that are of a sufficiently high dimension, then these points can be projected into a suitably lower dimensional space in a way which approximately preserves the distances between the points.
+We achieve this by randomly generate a $k \times d$ matrix with the assignment stated coefficients.
+
 \begin{lstlisting}[frame=single]
 def create_matrix(d, k)    
     mtx_val = 1/sqrt(d)
@@ -17,21 +19,22 @@ def create_matrix(d, k)
     return mtx
 \end{lstlisting}
     
-Then we evaluate how well the Euclidean distance is preserved for the first 20 instances of the dataset by plotting the distortion for all the pairs.
+Then we evaluate how well the Euclidean distance is preserved for the first 20 instances of the dataset by plotting the distortion for all the ${20\choose 2}$ pairs.
 
-Before plotting the distortion we expected its values to be between 0 and 1 (as proved in exercise 2) and also the value of distortion should approaches 1 when k increases because it will keep approaching the original d dimensions and thus less distortion.
+We expect the distortion values to be between 0 and 1 (as proved in exercise 2). Besides, when $k$ increases, the number dimensions approaches the original dimension $d$. Thus, the distortion value should approach 1.
    
-Our expectations were confirmed by our experiment as in the below figures. 
+Our expectations are confirmed by our experiments as in the below figures. 
 
-In figure \ref{k50}, we can see that the most frequent value of distortion values is around 0.25 when k is 50
+In figure \ref{k50}, we can see that the most frequent value of distortion values is around 0.25 when $k = 50$.
+
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.9\textwidth]{shots/k50.png}
-\caption{Histogram of the distortion values with k = 50  }
+\caption{Histogram of the distortion values with k = 50 }
 \label{k50}
 \end{figure}
 
-In figure \ref{k100}, the most frequent value of distortion values when k is 100 is around 0.35.
+In figure \ref{k100}, the most frequent value of distortion values when $k = 100$ is around 0.35.
 
 \begin{figure}[!htb]
 \centering
@@ -40,7 +43,7 @@ In figure \ref{k100}, the most frequent value of distortion values when k is 100
 \label{k100}
 \end{figure}
 
-As we predicted, we can see that the distortion value increased to 0.79 when k is 500 as in figure \ref{k500}
+As we predict, we can see that the distortion value increases to 0.79 when $k = 500$ as in figure \ref{k500}.
 
 \begin{figure}[!htb]
 \centering
@@ -49,7 +52,7 @@ As we predicted, we can see that the distortion value increased to 0.79 when k i
 \label{k500}
 \end{figure} 
 
-In addition we changed our 1-NN implementation of Assignment 1a so that it uses the Euclidean distance instead of the cosine similarity as in the below function 
+In addition, we change our 1-NN implementation of Assignment 1a so that it uses Euclidean Distance instead of Cosine Similarity, as in the below function 
 
 \begin{lstlisting}[frame=single]
 def euclidean_distance(v1, v2):
@@ -57,16 +60,16 @@ def euclidean_distance(v1, v2):
     return np.linalg.norm(diff)
 \end{lstlisting}
 
+We run our implementation with and without random projection. We scale our vectors after the projection step to partially compensate for the distortion using a scaling factor $ \frac{\sqrt{d}}{\sqrt{k}} $. Note that we run the implementation for 1000 test cases, as it takes a lot of time to experiment the whole 10,000 test cases. 
 
-We Run your implementation with and without random projection. But we scaled our vectors after the projection step to partially compensate for the distortion using a scaling factor $ \frac{\sqrt{d}}{\sqrt{k}} $ . Note that we run the implementation for 1000 test cases, as it takes a lot of time for 10,000 test cases we are running this 4 times to compare the results.
+We perform 4 experiments, with and without Random Projections. When using Random Projections, we experiment 3 times with $k = {50,100,500}$ to compare the results. The 
+confusion matrices are shown in table \ref{confusion_matrix}, \ref{confusion_matrix_50}, \ref{confusion_matrix_100}, and \ref{confusion_matrix_500}.
 
-We measured the performance of 1-NN and we compared with and without random projection.
-and we got the following results:
-
-For 1-NN without Random Projections:
+\subsection*{1-NN without Random Projections}
 
 \begin{lstlisting}[frame=single]
 Accuracy of the NN classifier is :  95.57 %
+Average Runtime: 0.27 seconds for each instance
 
 Class  0 :
 Precision: 0.965517241379
@@ -109,11 +112,32 @@ Precision: 0.927835051546
 Recall: 0.957446808511
 \end{lstlisting}
 
-For 1-NN with Random Projections of K=50
+\begin{table}[]
+  \centering
+\caption{The final confusion matrix without RF}
+\label{confusion_matrix}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|}
+\hline
+\textbf{Predicted-TrueLabel} & \textbf{0} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{8} & \textbf{9} & \textbf{Total} \\ \hline
+\textbf{0}                   & 84         & 0          & 1          & 0          & 0          & 0          & 1          & 0          & 1          & 0          & 87             \\ \hline
+\textbf{1}                   & 0          & 125        & 0          & 0          & 1          & 0          & 0          & 2          & 0          & 0          & 128            \\ \hline
+\textbf{2}                   & 0          & 1          & 110        & 1          & 0          & 0          & 0          & 0          & 0          & 0          & 112            \\ \hline
+\textbf{3}                   & 0          & 0          & 0          & 100        & 0          & 2          & 0          & 2          & 2          & 1          & 107            \\ \hline
+\textbf{4}                   & 0          & 0          & 1          & 0          & 104        & 1          & 1          & 1          & 0          & 0          & 108            \\ \hline
+\textbf{5}                   & 1          & 0          & 0          & 3          & 0          & 84         & 0          & 0          & 3          & 0          & 91             \\ \hline
+\textbf{6}                   & 0          & 0          & 0          & 0          & 0          & 0          & 85         & 0          & 0          & 0          & 85             \\ \hline
+\textbf{7}                   & 0          & 0          & 4          & 2          & 0          & 0          & 0          & 93         & 0          & 2          & 101            \\ \hline
+\textbf{8}                   & 0          & 0          & 0          & 1          & 0          & 0          & 0          & 0          & 82         & 1          & 84             \\ \hline
+\textbf{9}                   & 0          & 0          & 0          & 0          & 5          & 0          & 0          & 1          & 1          & 90         & 97             \\ \hline
+\textbf{Total}               & 85         & 126        & 116        & 107        & 110        & 87         & 87         & 99         & 89         & 94         &                \\ \hline
+\end{tabular}
+\end{table}
 
+\subsection*{1-NN with Random Projections, $k=50$}
 
 \begin{lstlisting}[frame=single]
 Accuracy of the NN classifier is :  92.3 %
+Average Runtime: 0.23 seconds for each instance
 
 Class  0 :
 Precision: 0.955056179775
@@ -157,12 +181,32 @@ Recall: 0.925531914894
 
 \end{lstlisting}
 
-For 1-NN with Random Projections of K=100
+\begin{table}[]
+  \centering
+\caption{The final confusion matrix with $k = 50$}
+\label{confusion_matrix_50}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|}
+\hline
+\textbf{Predicted-TrueLabel} & \textbf{0} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{8} & \textbf{9} & \textbf{Total} \\ \hline
+\textbf{0}                   & 85         & 0          & 1          & 0          & 0          & 0          & 2          & 0          & 1          & 0          & 89             \\ \hline
+\textbf{1}                   & 0          & 125        & 2          & 1          & 1          & 0          & 0          & 3          & 1          & 1          & 134            \\ \hline
+\textbf{2}                   & 0          & 1          & 99         & 0          & 0          & 0          & 0          & 0          & 4          & 0          & 104            \\ \hline
+\textbf{3}                   & 0          & 0          & 2          & 97         & 0          & 1          & 0          & 2          & 1          & 2          & 105            \\ \hline
+\textbf{4}                   & 0          & 0          & 0          & 0          & 98         & 0          & 0          & 0          & 1          & 3          & 102            \\ \hline
+\textbf{5}                   & 0          & 0          & 1          & 7          & 0          & 83         & 0          & 0          & 4          & 0          & 95             \\ \hline
+\textbf{6}                   & 0          & 0          & 2          & 0          & 0          & 0          & 84         & 0          & 1          & 0          & 87             \\ \hline
+\textbf{7}                   & 0          & 0          & 2          & 1          & 0          & 2          & 1          & 92         & 1          & 1          & 100            \\ \hline
+\textbf{8}                   & 0          & 0          & 7          & 1          & 1          & 0          & 0          & 0          & 73         & 0          & 82             \\ \hline
+\textbf{9}                   & 0          & 0          & 0          & 0          & 10         & 1          & 0          & 2          & 2          & 87         & 102            \\ \hline
+\textbf{Total}               & 85         & 126        & 116        & 107        & 110        & 87         & 87         & 99         & 89         & 94         &                \\ \hline
+\end{tabular}
+\end{table}
 
-
+For 1-NN with Random Projections of $k=100$
 
 \begin{lstlisting}[frame=single]
 Accuracy of the NN classifier is :  94.0 %
+Average Runtime: 0.25 seconds for each instance
 
 Class  0 :
 Precision: 0.976744186047
@@ -205,12 +249,32 @@ Precision: 0.864077669903
 Recall: 0.946808510638
 \end{lstlisting}
 
+\begin{table}[]
+  \centering
+\caption{The final confusion matrix with RF, $k = 100$}
+\label{confusion_matrix_100}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|}
+\hline
+\textbf{Predicted-TrueLabel} & \textbf{0} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{8} & \textbf{9} & \textbf{Total} \\ \hline
+\textbf{0}                   & 84         & 0          & 1          & 0          & 0          & 0          & 1          & 0          & 0          & 0          & 86             \\ \hline
+\textbf{1}                   & 0          & 125        & 1          & 0          & 0          & 0          & 0          & 1          & 0          & 1          & 128            \\ \hline
+\textbf{2}                   & 0          & 1          & 108        & 1          & 0          & 0          & 0          & 0          & 1          & 0          & 111            \\ \hline
+\textbf{3}                   & 0          & 0          & 0          & 98         & 0          & 3          & 0          & 1          & 4          & 0          & 106            \\ \hline
+\textbf{4}                   & 0          & 0          & 1          & 0          & 98         & 0          & 1          & 0          & 0          & 2          & 102            \\ \hline
+\textbf{5}                   & 0          & 0          & 0          & 3          & 0          & 81         & 0          & 0          & 8          & 1          & 93             \\ \hline
+\textbf{6}                   & 1          & 0          & 0          & 0          & 2          & 0          & 85         & 0          & 0          & 0          & 88             \\ \hline
+\textbf{7}                   & 0          & 0          & 4          & 2          & 1          & 0          & 0          & 96         & 0          & 0          & 103            \\ \hline
+\textbf{8}                   & 0          & 0          & 1          & 1          & 0          & 1          & 0          & 0          & 76         & 1          & 80             \\ \hline
+\textbf{9}                   & 0          & 0          & 0          & 2          & 9          & 2          & 0          & 1          & 0          & 89         & 103            \\ \hline
+\textbf{Total}               & 85         & 126        & 116        & 107        & 110        & 87         & 87         & 99         & 89         & 94         &                \\ \hline
+\end{tabular}
+\end{table}
 
-For 1-NN with Random Projections of K=500
-
+For 1-NN with Random Projections of $k=500$
 
 \begin{lstlisting}[frame=single]
 Accuracy of the NN classifier is :  95.6 %
+Average Runtime: 0.27 seconds for each instance
 
 Class  0 :
 Precision: 0.943820224719
@@ -253,6 +317,28 @@ Precision: 0.947368421053
 Recall: 0.957446808511
 \end{lstlisting}
 
+\begin{table}[]
+  \centering
+\caption{The final confusion matrix with RF, $k = 500$}
+\label{confusion_matrix_500}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|}
+\hline
+\textbf{Predicted-TrueLabel} & \textbf{0} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{8} & \textbf{9} & \textbf{Total} \\ \hline
+\textbf{0}                   & 84         & 0          & 2          & 0          & 0          & 1          & 1          & 0          & 1          & 0          & 89             \\ \hline
+\textbf{1}                   & 0          & 125        & 0          & 0          & 0          & 0          & 0          & 2          & 0          & 0          & 127            \\ \hline
+\textbf{2}                   & 0          & 1          & 109        & 0          & 0          & 0          & 0          & 0          & 1          & 0          & 111            \\ \hline
+\textbf{3}                   & 0          & 0          & 0          & 99         & 0          & 1          & 0          & 2          & 2          & 1          & 105            \\ \hline
+\textbf{4}                   & 0          & 0          & 0          & 0          & 107        & 1          & 1          & 1          & 0          & 1          & 111            \\ \hline
+\textbf{5}                   & 1          & 0          & 0          & 4          & 0          & 84         & 0          & 0          & 5          & 0          & 94             \\ \hline
+\textbf{6}                   & 0          & 0          & 2          & 0          & 0          & 0          & 85         & 0          & 0          & 0          & 87             \\ \hline
+\textbf{7}                   & 0          & 0          & 3          & 2          & 0          & 0          & 0          & 94         & 0          & 0          & 99             \\ \hline
+\textbf{8}                   & 0          & 0          & 0          & 1          & 0          & 0          & 0          & 0          & 79         & 2          & 82             \\ \hline
+\textbf{9}                   & 0          & 0          & 0          & 1          & 3          & 0          & 0          & 0          & 1          & 90         & 95             \\ \hline
+\textbf{Total}               & 85         & 126        & 116        & 107        & 110        & 87         & 87         & 99         & 89         & 94         &                \\ \hline
+\end{tabular}
+\end{table}
 
-we can see that the performance of the classifier with projections of K=50 and K=100 is lower than the performance without projections as this huge dimensionality reduction cause loss of information. but we can see the performance is improving with the increasing of K.
-And for K=500, the performance became better than the classifier without projections and the cause could be some noise and outliers that their effect was reduced with our dimensionality reduction by random projections.  
+We can see that the performance of the classifier with random projections of $k=50$ and $k=100$ is lower than the performance without projections as this huge dimensionality reduction causes a big loss of information. But we can see the performance is improving with the increment of $k$.
+For $k=500$, the performance become slightly better than the classifier without projections. The cause could be some noise and outliers were reduced by our dimensionality reduction, and the value of $k$ is close to the original $d$ which preserves most of the information. 
+
+Regarding the runtime, the dimensionality reduction does not show a huge difference among the different settings. It might be because the problem is still not complex enough. If we have thousands of dimensions, then the difference can be clearer. The fastest one is around 0.2 seconds for an instance, and the slowest one (without Random Projections) is around 0.3 seconds for an instance.
